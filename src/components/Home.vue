@@ -1,9 +1,14 @@
-<script setup>
+<script lang="ts" setup>
+import Chatbox from '@/components/Chatbox.vue';
+import ChatViewer from "@/components/ChatViewer.vue";
+
+
 
 </script>
 
 <template>
-  <h2>Hi there</h2>
+  <ChatViewer />
+  <Chatbox />
 </template>
 
 <style lang="sass" scoped>

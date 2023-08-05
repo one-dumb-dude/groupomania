@@ -3,7 +3,7 @@ const knex = require('../knex/knex');
 const getAllMessages = (req, res) => {
     knex('message').select('*')
         .then((message) => {
-            console.log('message received', message)
+            console.log('message received', message);
             res.status(200).json(message);
         })
         .catch((error) => {
@@ -13,6 +13,26 @@ const getAllMessages = (req, res) => {
 
 };
 
+const insertAMessage = (req, res) => {
+
+    const data = {
+        user_id: 1,
+        text: 'muy bien?'
+    };
+
+    knex('message')
+        .insert(data)
+        .returning(['user_id', 'message_id', 'text'])
+        .then((info) => {
+            console.log('data inserted: ', info);
+            res.status(201).send({message: info})
+        })
+        .catch((err) => {
+            console.error('Error: ', err);
+            res.status(501).send({error: err})
+        });
+}
+
 module.exports = {
-    getAllMessages
+    getAllMessages, insertAMessage
 }
