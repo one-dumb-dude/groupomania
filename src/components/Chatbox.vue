@@ -3,6 +3,7 @@ import {useStore} from 'vuex';
 import {computed, reactive} from 'vue';
 
 const store = useStore();
+
 const state = reactive({
   inputValue: ''
 });
@@ -14,12 +15,10 @@ const handleSubmit = () => {
   store.commit('chatbox/updateText', state.inputValue);
   state.inputValue = '';
 }
-
 </script>
 
 <template>
   <form @submit.prevent="handleSubmit">
-    <label for="chat-input">Chat input</label>
     <input type="text" name="chat-input" v-model="state.inputValue"/>
     <button type="submit">Send</button>
   </form>

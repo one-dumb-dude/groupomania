@@ -1,9 +1,11 @@
 import {createStore} from 'vuex';
 import chatBox from './chatbox';
+import chatViewer from './chatviewer';
 
 const store = createStore({
     modules: {
-        chatbox: chatBox
+        chatbox: chatBox,
+        chatviewer: chatViewer
     }
 })
 

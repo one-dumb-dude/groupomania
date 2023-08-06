@@ -3,10 +3,6 @@ import Home from './components/Home.vue'
 </script>
 
 <template>
-  <header>
-    hi
-  </header>
-
   <main>
     <Home />
   </main>
