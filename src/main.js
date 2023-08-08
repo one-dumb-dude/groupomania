@@ -1,9 +1,11 @@
 import './assets/styles/main.sass'
 
-import { createApp } from 'vue'
-import App from './App.vue'
-import store from '/store/index'
+import { createApp } from 'vue';
+import App from './App.vue';
+import store from '/store/index';
+import router from './router';
 
 createApp(App)
+    .use(router)
     .use(store)
-    .mount('#app')
+    .mount('#app');

@@ -1,6 +1,6 @@
 const chatboxMutations = {
-    updateText(state, payload) {
-        state.text = payload
+    setErrorMessage(state, payload) {
+        state.errorMessage = payload
     }
 }
 

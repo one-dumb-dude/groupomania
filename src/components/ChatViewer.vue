@@ -4,18 +4,27 @@ import {computed, onMounted} from "vue";
 
 const store = useStore();
 
+interface Message {
+  message_id: number;
+  user_id: number;
+  text: string;
+}
+
 onMounted(() => {
   store.dispatch('chatviewer/fetchMessages');
-  console.log('que paso')
-})
+});
 
-const messages = computed(() => store.state.chatviewer.messages);
+const messages = computed(() => store.state.chatviewer.messages as Message[]);
 
 </script>
 n
 <template>
   <h2>Messages:</h2>
-  {{messages}}
+  <ul>
+    <li v-for="message in messages" :key="message.message_id">
+      {{message.user_id}}: {{message.text}}
+    </li>
+  </ul>
 </template>
 
 <style lang="sass" scoped>

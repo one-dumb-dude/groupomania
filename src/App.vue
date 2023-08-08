@@ -1,14 +1,16 @@
 <script setup>
-import Home from './components/Home.vue'
+import Home from './views/Home.vue'
+import Login from '@/views/Login.vue';
 </script>
 
 <template>
   <main>
-    <Home />
+    <router-view></router-view>
   </main>
 </template>
 
 <style lang="sass" scoped>
-header
-  font-size: 24px
+main
+  width: 100vw
+  height: 100vh
 </style>

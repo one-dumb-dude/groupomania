@@ -1,11 +1,13 @@
 import chatboxMutations from './mutations';
+import chatboxActions from './actions';
 
 const chatBox = {
     namespaced: true,
     state: () => ({
-        text: 'initial'
+        errorMessage: null
     }),
-    mutations: chatboxMutations
+    mutations: chatboxMutations,
+    actions: chatboxActions
 }
 
 export default chatBox;

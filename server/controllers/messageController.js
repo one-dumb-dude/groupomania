@@ -14,10 +14,11 @@ const getAllMessages = (req, res) => {
 };
 
 const insertAMessage = (req, res) => {
+    console.log('Attempting to insert a message!');
 
     const data = {
-        user_id: 1,
-        text: 'muy bien?'
+        user_id: req.body.user_id,
+        text: req.body.text
     };
 
     knex('message')
