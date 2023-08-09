@@ -1,5 +1,14 @@
 <script lang="ts" setup>
 import {useRouter} from "vue-router";
+import {useStore} from "vuex";
+import {reactive} from "vue";
+
+const store = useStore();
+
+const state = reactive({
+  username: '',
+  password: ''
+});
 
 const router = useRouter();
 
@@ -8,8 +17,8 @@ const handleSignUp = () => {
 }
 
 const handleLogin = () => {
-  console.log('Login pressed')
-  router.push('/home')
+  store.dispatch('user/loginUser', {username: state.username, password: state.password});
+  router.push('/home');
 }
 </script>
 
@@ -17,9 +26,9 @@ const handleLogin = () => {
   <div id="login-main">
     <form id="login-form" @submit.prevent>
       <label for="username">Username:</label>
-      <input type="text" name="username" />
+      <input type="text" name="username" v-model="state.username" />
       <label for="password">Password:</label>
-      <input type="password" name="password" />
+      <input type="password" name="password" v-model="state.password" />
       <button type="button" @click="handleSignUp">Sign-Up</button>
       <button type="submit" @click="handleLogin">Login</button>
     </form>

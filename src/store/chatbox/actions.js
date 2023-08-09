@@ -7,7 +7,7 @@ const chatboxActions = {
             await dispatch('chatviewer/fetchMessages', null, {root: 'true'});
         } catch (error) {
             console.error('Error: ', error);
-            commit('setErrorMessage', {error});
+            commit('SET_ERROR_MESSAGE', {error});
         }
     }
 };

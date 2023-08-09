@@ -4,7 +4,7 @@ const chatViewerActions = {
     async fetchMessages({commit}) {
         try {
             const response = await axios.get('http://localhost:3001/api/messages');
-            commit('loadMessages', response.data)
+            commit('LOAD_MESSAGES', response.data)
         } catch (error) {
             console.error("error: ", error);
         }

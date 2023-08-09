@@ -1,5 +1,5 @@
 const chatViewerMutations = {
-    loadMessages(state, payload) {
+    LOAD_MESSAGES(state, payload) {
         state.messages = payload
     }
 }

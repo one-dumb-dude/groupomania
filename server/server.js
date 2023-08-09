@@ -14,7 +14,9 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 const messageRoutes = require('./routes/messages');
+const userRoutes = require('./routes/users');
 
+app.use('/api/users', userRoutes)
 app.use('/api/messages', messageRoutes);
 
 app.listen(port, () => {

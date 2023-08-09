@@ -2,11 +2,10 @@
 import Chatbox from '@/components/Chatbox.vue';
 import ChatViewer from "@/components/ChatViewer.vue";
 
-
-
 </script>
 
 <template>
+  <router-link to="/userprofile">User Profile</router-link>
   <ChatViewer />
   <Chatbox />
 </template>
