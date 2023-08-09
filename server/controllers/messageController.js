@@ -1,14 +1,21 @@
 const knex = require('../knex/knex');
 
 const getAllMessages = (req, res) => {
-    knex('message').select('*')
-        .then((message) => {
-            res.status(200).json(message);
+    knex.select(
+        'u.username',
+        'm.text',
+        'm.created_at',
+        'm.updated_at'
+    )
+        .from('user as u')
+        .join('message as m', 'u.user_id', '=', 'm.user_id')
+        .then((messageData) => {
+            res.status(200).json(messageData);
         })
         .catch((error) => {
             console.error('Error:', error);
             res.status(500).json({message: 'get all messages'});
-        })
+        });
 
 };
 

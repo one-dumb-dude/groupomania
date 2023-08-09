@@ -1,24 +1,23 @@
 <script lang="ts" setup>
 import {useStore} from "vuex";
 import {computed, onMounted} from "vue";
-import {Message, User} from "@/types";
+import {Message} from "@/types";
 
 const store = useStore();
+
+const messages = computed(() => store.state.chatviewer.messages as Message[]);
 
 onMounted(() => {
   store.dispatch('chatviewer/fetchMessages');
 });
 
-const messages = computed(() => store.state.chatviewer.messages as Message[]);
-const user = computed(() => store.state.user as User);
-
 </script>
-n
+
 <template>
   <h4>Groupomania chat:</h4>
   <ul>
     <li v-for="message in messages" :key="message.message_id">
-      <span>{{user.username}}</span>: {{message.text}}
+      <span>{{message.username}}</span>:{{message.text}}
     </li>
   </ul>
 </template>

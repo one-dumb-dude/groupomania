@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {useRouter} from "vue-router";
 import {useStore} from "vuex";
-import {reactive} from "vue";
+import {computed, reactive} from "vue";
 
 const store = useStore();
 
@@ -12,13 +12,17 @@ const state = reactive({
 
 const router = useRouter();
 
+const errorMessage = computed(() => store.state.user.errorMessage);
+
 const handleSignUp = () => {
   router.push('/signup')
 }
 
-const handleLogin = () => {
-  store.dispatch('user/loginUser', {username: state.username, password: state.password});
-  router.push('/home');
+const handleLogin = async () => {
+  const success = await store.dispatch('user/loginUser', {username: state.username, password: state.password});
+  if (success) {
+    await router.push('/home');
+  }
 }
 </script>
 
@@ -32,12 +36,14 @@ const handleLogin = () => {
       <button type="button" @click="handleSignUp">Sign-Up</button>
       <button type="submit" @click="handleLogin">Login</button>
     </form>
+    <h4 id="error__message" v-if="errorMessage">{{errorMessage}}</h4>
   </div>
 </template>
 
 <style lang="sass" scoped>
 #login-main
   display: flex
+  flex-direction: column
   justify-content: center
   align-items: center
   width: 100%
@@ -55,4 +61,8 @@ const handleLogin = () => {
     button
       &:hover
         cursor: pointer
+
+#error__message
+  font-family: sans-serif
+  color: red
 </style>

@@ -5,6 +5,7 @@ import {computed, reactive} from 'vue';
 const store = useStore();
 
 const errorMessage = computed(() => store.state.chatbox.errorMessage);
+const user = computed(() => store.state.user)
 
 const state = reactive({
   inputValue: ''
@@ -13,7 +14,7 @@ const state = reactive({
 const handleSubmit = () => {
   console.log(state.inputValue);
   if (state.inputValue !== '') {
-    store.dispatch('chatbox/postMessage', {user_id: 1, text: state.inputValue});
+    store.dispatch('chatbox/postMessage', {user_id: user.value.user_id, text: state.inputValue});
     state.inputValue = '';
   }
 }
