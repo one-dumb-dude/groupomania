@@ -12,6 +12,7 @@ type State = {
   passwordMaxLength: number;
   passwordErrorMessage: string | null;
   confirmPassword: string | null;
+  validityValid: boolean
 }
 
 const state = reactive<State>({
@@ -24,7 +25,8 @@ const state = reactive<State>({
   passwordMinLength: 8,
   passwordMaxLength: 128,
   passwordErrorMessage: null,
-  confirmPassword: null
+  confirmPassword: null,
+  validityValid: false
 });
 
 const usernameRef = ref(null);
@@ -32,6 +34,7 @@ const passwordRef = ref(null);
 
 const onInputChange = (inputReference, labelNameOfInput) => {
   const validity = inputReference.validity;
+  state.validityValid = validity.valid;
 
   const labelNameOfInputUppercase = `${labelNameOfInput.charAt(0).toUpperCase() + labelNameOfInput.slice(1)}`;
   const statePropertyErrorMessage = `${labelNameOfInput}ErrorMessage`;
@@ -101,7 +104,7 @@ const passwordMatch = computed(() => {
 
       <span v-if="!passwordMatch" class="error-message">Passwords do not match</span>
 
-      <button :disabled="!passwordMatch" type="submit">Submit</button>
+      <button :disabled="!state.validityValid || !passwordMatch" type="submit">Submit</button>
     </form>
   </div>
 
