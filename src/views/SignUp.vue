@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import {computed, reactive, ref} from "vue";
+import axios from "axios";
 
 type State = {
   username: string | null;
@@ -12,7 +13,8 @@ type State = {
   passwordMaxLength: number;
   passwordErrorMessage: string | null;
   confirmPassword: string | null;
-  validityValid: boolean
+  loginErrorMessage: string | null;
+  validityValid: boolean;
 }
 
 const state = reactive<State>({
@@ -26,6 +28,7 @@ const state = reactive<State>({
   passwordMaxLength: 128,
   passwordErrorMessage: null,
   confirmPassword: null,
+  loginErrorMessage: null,
   validityValid: false
 });
 
@@ -56,6 +59,24 @@ const passwordMatch = computed(() => {
   return state.password === state.confirmPassword
 });
 
+const onSubmit = async (event) => {
+  event.preventDefault();
+
+  const userInfo = {
+    username: state.username,
+    password: state.password
+  }
+  try {
+    const response = await axios.post('http://localhost:3001/api/users/signup', userInfo);
+    const data = response.data;
+    console.log(data);
+  } catch (errorResponse) {
+    console.log(errorResponse);
+    state.loginErrorMessage = errorResponse.response.data.error;
+  }
+
+}
+
 
 </script>
 
@@ -63,7 +84,7 @@ const passwordMatch = computed(() => {
 
   <div id="signup-form">
     <h2>Sign up</h2>
-    <form>
+    <form @submit="onSubmit">
       <label for="username">Username</label>
       <input type="text"
              ref="usernameRef"
@@ -105,6 +126,7 @@ const passwordMatch = computed(() => {
       <span v-if="!passwordMatch" class="error-message">Passwords do not match</span>
 
       <button :disabled="!state.validityValid || !passwordMatch" type="submit">Submit</button>
+      <span v-if="state.loginErrorMessage">{{state.loginErrorMessage}}</span>
     </form>
   </div>
 

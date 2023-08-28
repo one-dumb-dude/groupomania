@@ -28,6 +28,18 @@ const getUser = async (req, res) => {
 
 }
 
+const signUpUser = async (req, res) => {
+    const {username, password} = req.body;
+    try {
+        res.status(500).json({error: 'User sign up failed'});
+        // res.status(201).json({message: 'User signed up!'});
+    } catch(error) {
+        console.error('Error Occurred:', error);
+        res.status(500).json({error: 'User sign up failed'});
+    }
+}
+
 module.exports = {
-    getUser
+    getUser,
+    signUpUser
 }
