@@ -1,4 +1,5 @@
 const knex = require('../knex/knex');
+const bcrypt = require('bcrypt');
 
 const getUser = async (req, res) => {
     const {username, password} = req.body;
@@ -30,10 +31,48 @@ const getUser = async (req, res) => {
 
 const signUpUser = async (req, res) => {
     const {username, password} = req.body;
+    const usernameMinLength = 5;
+    const usernameMaxLength = 15;
+    const passwordMinLength = 8;
+    const passwordMaxLength = 128;
+
+    const usernameString = `^[a-zA-Z0-9]{${usernameMinLength},${usernameMaxLength}}$`;
+    const usernameRegEx = new RegExp(usernameString);
+
+    // validate username and password (server side)
+    if (!usernameRegEx.test(username)) {
+        return res.status(500).json({error: `Username must be alphanumeric and contain ${usernameMinLength} - ${usernameMaxLength} characters.`});
+    }
+
+    if (password.length < passwordMinLength || password.length > passwordMaxLength) {
+        return res.status(500).json({error: `Password must contain ${passwordMinLength} - ${passwordMaxLength} characters`});
+    }
+
     try {
-        res.status(500).json({error: 'User sign up failed'});
+        const saltRounds = 11;
+        bcrypt.hash(password, saltRounds, async (err, hashedPassword) => {
+            if (err) return res.status(500).json({error: 'Error handling password'});
+
+            const userInfo = {
+                username: username,
+                password_hash: hashedPassword
+            }
+
+            knex('user')
+                .insert(userInfo)
+                .then(() => {
+                    res.status(201).json({message: 'New user created!'});
+                })
+                .catch((error) => {
+                    console.error('Error: ', error);
+                    if (error.constraint === 'user_username_key') return res.status(500).json({error: 'User already exists'});
+                    res.status(500).json({error: 'Error creating new user.'})
+                });
+
+        });
+
         // res.status(201).json({message: 'User signed up!'});
-    } catch(error) {
+    } catch (error) {
         console.error('Error Occurred:', error);
         res.status(500).json({error: 'User sign up failed'});
     }
