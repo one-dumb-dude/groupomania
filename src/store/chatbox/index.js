@@ -4,7 +4,7 @@ import chatboxActions from './actions';
 const chatBox = {
     namespaced: true,
     state: () => ({
-        errorMessage: null
+        loginErrorMessage: null
     }),
     mutations: chatboxMutations,
     actions: chatboxActions

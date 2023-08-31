@@ -60,20 +60,15 @@ const signUpUser = async (req, res) => {
 
             knex('user')
                 .insert(userInfo)
-                .returning(['user_id', 'username'])
-                .then((returningData) => {
-                    console.log(returningData[0]);
-                    res.status(201).json(returningData[0]);
+                .then(() => {
+                    res.status(201).json({message: 'User signed up successfully'});
                 })
                 .catch((error) => {
-                    console.error('Error: ', error);
                     if (error.constraint === 'user_username_key') return res.status(500).json({error: 'User already exists'});
-                    res.status(500).json({error: 'Error creating new user.'})
+                    return res.status(500).json({error: 'Error creating new user.'})
                 });
 
         });
-
-        // res.status(201).json({message: 'User signed up!'});
     } catch (error) {
         console.error('Error Occurred:', error);
         res.status(500).json({error: 'User sign up failed'});

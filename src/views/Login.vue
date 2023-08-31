@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {useRouter} from "vue-router";
 import {useStore} from "vuex";
-import {computed, onMounted, reactive} from "vue";
+import {computed, reactive} from "vue";
 
 const store = useStore();
 
@@ -12,7 +12,8 @@ const state = reactive({
 
 const router = useRouter();
 
-const errorMessage = computed(() => store.state.user.errorMessage);
+const loginErrorMessage = computed(() => store.state.user.loginErrorMessage);
+const signupSuccessMessage = computed(()=> store.state.user.signupSuccessMessage);
 
 const handleSignUp = () => {
   router.push('/signup');
@@ -27,8 +28,8 @@ const handleLogin = async () => {
 </script>
 
 <template>
-  <div id="login-main">
-    <form id="login-form" @submit.prevent>
+  <div id="login__main">
+    <form id="login__form" @submit.prevent>
       <label for="username">Username:</label>
       <input type="text" name="username" v-model="state.username" />
       <label for="password">Password:</label>
@@ -36,20 +37,22 @@ const handleLogin = async () => {
       <button type="button" @click="handleSignUp">Sign-Up</button>
       <button type="submit" @click="handleLogin">Login</button>
     </form>
-    <h4 id="error__message" v-if="errorMessage">{{errorMessage}}</h4>
+    <h4 id="message__login_error" v-if="loginErrorMessage">{{loginErrorMessage}}</h4>
+    <span id="message__signup_success" v-if="signupSuccessMessage">{{signupSuccessMessage}}</span>
   </div>
 </template>
 
 <style lang="sass" scoped>
-#login-main
-  display: flex
-  flex-direction: column
-  justify-content: center
-  align-items: center
-  width: 100%
-  height: 100%
+#login
+  &__main
+    display: flex
+    flex-direction: column
+    justify-content: center
+    align-items: center
+    width: 100%
+    height: 100%
 
-  #login-form
+  &__form
     display: flex
     flex-direction: column
     grid-gap: 15px
@@ -62,7 +65,12 @@ const handleLogin = async () => {
       &:hover
         cursor: pointer
 
-#error__message
-  font-family: sans-serif
-  color: red
+#message
+  &__login_error
+    font-family: sans-serif
+    color: red
+
+  &__signup_success
+    font-family: sans-serif
+    color: lawngreen
 </style>

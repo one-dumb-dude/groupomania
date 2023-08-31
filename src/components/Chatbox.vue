@@ -4,7 +4,7 @@ import {computed, reactive} from 'vue';
 
 const store = useStore();
 
-const errorMessage = computed(() => store.state.chatbox.errorMessage);
+const loginErrorMessage = computed(() => store.state.chatbox.loginErrorMessage);
 const user = computed(() => store.state.user)
 
 const state = reactive({
@@ -24,7 +24,7 @@ const handleSubmit = () => {
     <input type="text" name="chat-input" v-model="state.inputValue"/>
     <button type="submit">Send</button>
   </form>
-  <h5 v-if="errorMessage !== null">{{errorMessage.error.message}}</h5>
+  <h5 v-if="loginErrorMessage !== null">{{loginErrorMessage.error.message}}</h5>
 </template>
 
 <style lang="sass">

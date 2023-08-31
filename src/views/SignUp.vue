@@ -2,23 +2,15 @@
 import {computed, reactive, ref} from "vue";
 import {useRouter} from "vue-router";
 import {useStore} from "vuex";
+import {Signup} from '@/types';
 
-type State = {
-  username: string | null;
-  usernameMinLength: number;
-  usernameMaxLength: number;
-  usernameRegExp: string;
-  usernameErrorMessage: string | null;
-  password: string | null;
-  passwordMinLength: number;
-  passwordMaxLength: number;
-  passwordErrorMessage: string | null;
-  confirmPassword: string | null;
-  loginErrorMessage: string | null;
-  validityValid: boolean;
-}
+const usernameRef = ref(null);
+const passwordRef = ref(null);
 
-const state = reactive<State>({
+const store = useStore();
+const router = useRouter();
+
+const state = reactive<Signup>({
   username: null,
   usernameMinLength: 5,
   usernameMaxLength: 15,
@@ -29,15 +21,9 @@ const state = reactive<State>({
   passwordMaxLength: 128,
   passwordErrorMessage: null,
   confirmPassword: null,
-  loginErrorMessage: null,
+  signupErrorMessage: null,
   validityValid: false
 });
-
-const store = useStore();
-const router = useRouter();
-
-const usernameRef = ref(null);
-const passwordRef = ref(null);
 
 const onInputChange = (inputReference, labelNameOfInput) => {
   const validity = inputReference.validity;
@@ -73,20 +59,9 @@ const onSubmit = async (event) => {
 
   const success = await store.dispatch('user/signupUser', userInfo);
   if (success) {
-    await router.push('/home')
+    await router.push('/login')
   }
-  // try {
-  //   const response = await axios.post('http://localhost:3001/api/users/signup', userInfo);
-  //   const data = response.data;
-  //   console.log(data);
-  // } catch (errorResponse) {
-  //   console.log(errorResponse);
-  //   state.loginErrorMessage = errorResponse.response.data.error;
-  // }
-
 }
-
-
 </script>
 
 <template>
@@ -135,7 +110,7 @@ const onSubmit = async (event) => {
       <span v-if="!passwordMatch" class="error-message">Passwords do not match</span>
 
       <button :disabled="!state.validityValid || !passwordMatch" type="submit">Submit</button>
-      <span v-if="state.loginErrorMessage">{{state.loginErrorMessage}}</span>
+      <span v-if="state.signupErrorMessage">{{ state.signupErrorMessage }}</span>
     </form>
   </div>
 
