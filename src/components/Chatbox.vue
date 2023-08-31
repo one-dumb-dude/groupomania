@@ -12,7 +12,6 @@ const state = reactive({
 });
 
 const handleSubmit = () => {
-  console.log(state.inputValue);
   if (state.inputValue !== '') {
     store.dispatch('chatbox/postMessage', {user_id: user.value.user_id, text: state.inputValue});
     state.inputValue = '';

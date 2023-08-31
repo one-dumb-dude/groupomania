@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import {computed, reactive, ref} from "vue";
-import axios from "axios";
+import {useRouter} from "vue-router";
+import {useStore} from "vuex";
 
 type State = {
   username: string | null;
@@ -31,6 +32,9 @@ const state = reactive<State>({
   loginErrorMessage: null,
   validityValid: false
 });
+
+const store = useStore();
+const router = useRouter();
 
 const usernameRef = ref(null);
 const passwordRef = ref(null);
@@ -66,14 +70,19 @@ const onSubmit = async (event) => {
     username: state.username,
     password: state.password
   }
-  try {
-    const response = await axios.post('http://localhost:3001/api/users/signup', userInfo);
-    const data = response.data;
-    console.log(data);
-  } catch (errorResponse) {
-    console.log(errorResponse);
-    state.loginErrorMessage = errorResponse.response.data.error;
+
+  const success = await store.dispatch('user/signupUser', userInfo);
+  if (success) {
+    await router.push('/home')
   }
+  // try {
+  //   const response = await axios.post('http://localhost:3001/api/users/signup', userInfo);
+  //   const data = response.data;
+  //   console.log(data);
+  // } catch (errorResponse) {
+  //   console.log(errorResponse);
+  //   state.loginErrorMessage = errorResponse.response.data.error;
+  // }
 
 }
 

@@ -15,7 +15,7 @@ const router = useRouter();
 const errorMessage = computed(() => store.state.user.errorMessage);
 
 const handleSignUp = () => {
-  router.push('/signup')
+  router.push('/signup');
 }
 
 const handleLogin = async () => {

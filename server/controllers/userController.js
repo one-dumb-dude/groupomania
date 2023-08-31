@@ -60,8 +60,10 @@ const signUpUser = async (req, res) => {
 
             knex('user')
                 .insert(userInfo)
-                .then(() => {
-                    res.status(201).json({message: 'New user created!'});
+                .returning(['user_id', 'username'])
+                .then((returningData) => {
+                    console.log(returningData[0]);
+                    res.status(201).json(returningData[0]);
                 })
                 .catch((error) => {
                     console.error('Error: ', error);
@@ -78,7 +80,40 @@ const signUpUser = async (req, res) => {
     }
 }
 
+const loginUser = async (req, res) => {
+    const {username, password} = req.body;
+
+    try {
+        const user = await knex('user')
+            .where({username})
+            .first();
+
+        if (!user) {
+            return res.status(401).json({error: 'Invalid username or password'});
+        }
+
+        const {password_hash, ...userInfo} = user;
+
+        bcrypt.compare(password, password_hash, (err, result) => {
+            if (err) return res.status(401).json({});
+
+            console.log(result);
+
+            if (result) {
+                console.log(userInfo);
+                return res.status(200).json(userInfo);
+            } else {
+                return res.status('401').json({message: 'Invalid Credentials'});
+            }
+        });
+    } catch (err) {
+        console.error(err);
+    }
+
+}
+
 module.exports = {
     getUser,
-    signUpUser
+    signUpUser,
+    loginUser
 }

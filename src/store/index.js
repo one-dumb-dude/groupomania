@@ -9,6 +9,6 @@ const store = createStore({
         chatviewer: chatViewer,
         user: User
     }
-})
+});
 
 export default store;
