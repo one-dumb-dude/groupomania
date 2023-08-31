@@ -21,7 +21,6 @@ const state = reactive<Signup>({
   passwordMaxLength: 128,
   passwordErrorMessage: null,
   confirmPassword: null,
-  signupErrorMessage: null,
   validityValid: false
 });
 
@@ -57,10 +56,7 @@ const onSubmit = async (event) => {
     password: state.password
   }
 
-  const success = await store.dispatch('user/signupUser', userInfo);
-  if (success) {
-    await router.push('/login')
-  }
+  await store.dispatch('user/signupUser', userInfo);
 }
 </script>
 
@@ -110,7 +106,7 @@ const onSubmit = async (event) => {
       <span v-if="!passwordMatch" class="error-message">Passwords do not match</span>
 
       <button :disabled="!state.validityValid || !passwordMatch" type="submit">Submit</button>
-      <span v-if="state.signupErrorMessage">{{ state.signupErrorMessage }}</span>
+      <span v-if="store.state.user.signupErrorMessage">{{ store.state.user.signupErrorMessage }}</span>
     </form>
   </div>
 

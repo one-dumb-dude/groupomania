@@ -1,34 +1,6 @@
 const knex = require('../knex/knex');
 const bcrypt = require('bcrypt');
 
-const getUser = async (req, res) => {
-    const {username, password} = req.body;
-
-    try {
-        const user = await knex('user')
-            .where({username})
-            .first();
-
-        if (!user) {
-            return res.status(401).json({message: 'Invalid username or Password'});
-        }
-
-        if (user['password_hash'].trim() !== password) {
-            return res.status(401).json({message: 'Invalid username or Password'})
-        }
-
-        const {password_hash, ...userInfo} = user;
-        console.log(userInfo);
-        return res.status(200).json(userInfo);
-
-    } catch (err) {
-        console.error('Error: ', err);
-        console.log('error occurred');
-        res.status(500).json({error: 'Issue logging in.'});
-    }
-
-}
-
 const signUpUser = async (req, res) => {
     const {username, password} = req.body;
     const usernameMinLength = 5;
@@ -39,19 +11,21 @@ const signUpUser = async (req, res) => {
     const usernameString = `^[a-zA-Z0-9]{${usernameMinLength},${usernameMaxLength}}$`;
     const usernameRegEx = new RegExp(usernameString);
 
-    // validate username and password (server side)
+    // validate username
     if (!usernameRegEx.test(username)) {
-        return res.status(500).json({error: `Username must be alphanumeric and contain ${usernameMinLength} - ${usernameMaxLength} characters.`});
+        return res.status(500).json({message: `Username must be alphanumeric and contain ${usernameMinLength} - ${usernameMaxLength} characters.`});
     }
 
+    // validate password
     if (password.length < passwordMinLength || password.length > passwordMaxLength) {
-        return res.status(500).json({error: `Password must contain ${passwordMinLength} - ${passwordMaxLength} characters`});
+        return res.status(500).json({message: `Password must contain ${passwordMinLength} - ${passwordMaxLength} characters`});
     }
 
+    // attempt to hash password
     try {
         const saltRounds = 11;
         bcrypt.hash(password, saltRounds, async (err, hashedPassword) => {
-            if (err) return res.status(500).json({error: 'Error handling password'});
+            if (err) return res.status(500).json({message: 'Error handling password'});
 
             const userInfo = {
                 username: username,
@@ -64,14 +38,14 @@ const signUpUser = async (req, res) => {
                     res.status(201).json({message: 'User signed up successfully'});
                 })
                 .catch((error) => {
-                    if (error.constraint === 'user_username_key') return res.status(500).json({error: 'User already exists'});
-                    return res.status(500).json({error: 'Error creating new user.'})
+                    if (error.constraint === 'user_username_key') return res.status(500).json({message: 'User already exists'});
+                    return res.status(500).json({message: 'Error creating new user.'})
                 });
 
         });
     } catch (error) {
         console.error('Error Occurred:', error);
-        res.status(500).json({error: 'User sign up failed'});
+        res.status(401).json({message: 'User sign up failed'});
     }
 }
 
@@ -84,31 +58,28 @@ const loginUser = async (req, res) => {
             .first();
 
         if (!user) {
-            return res.status(401).json({error: 'Invalid username or password'});
+            return res.status(401).json({message: 'Invalid username or password'});
         }
 
         const {password_hash, ...userInfo} = user;
 
         bcrypt.compare(password, password_hash, (err, result) => {
-            if (err) return res.status(401).json({});
-
-            console.log(result);
+            if (err) return res.status(401).json({message: 'Invalid username or password'});
 
             if (result) {
-                console.log(userInfo);
                 return res.status(200).json(userInfo);
             } else {
-                return res.status('401').json({message: 'Invalid Credentials'});
+                return res.status(401).json({message: 'Invalid Credentials'});
             }
         });
     } catch (err) {
         console.error(err);
+        return res.status(500).json({message: 'Server had an issue logging in'});
     }
 
 }
 
 module.exports = {
-    getUser,
     signUpUser,
     loginUser
 }

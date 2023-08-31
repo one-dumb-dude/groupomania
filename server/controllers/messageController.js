@@ -14,7 +14,7 @@ const getAllMessages = (req, res) => {
         })
         .catch((error) => {
             console.error('Error:', error);
-            res.status(500).json({message: 'get all messages'});
+            res.status(500).json({message: 'Error getting messages'});
         });
 
 };
@@ -32,11 +32,11 @@ const insertAMessage = (req, res) => {
         .returning(['user_id', 'message_id', 'text'])
         .then((info) => {
             console.log('data inserted: ', info);
-            res.status(201).send({message: info})
+            res.status(201).send({message: info});
         })
         .catch((err) => {
             console.error('Error: ', err);
-            res.status(501).send({error: err})
+            res.status(501).send({message: 'Server side error'});
         });
 }
 

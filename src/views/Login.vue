@@ -20,10 +20,7 @@ const handleSignUp = () => {
 }
 
 const handleLogin = async () => {
-  const success = await store.dispatch('user/loginUser', {username: state.username, password: state.password});
-  if (success) {
-    await router.push('/home');
-  }
+  await store.dispatch('user/loginUser', {username: state.username, password: state.password});
 }
 </script>
 

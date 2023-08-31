@@ -9,6 +9,5 @@ export type Signup = {
     passwordMaxLength: number;
     passwordErrorMessage: string | null;
     confirmPassword: string | null;
-    signupErrorMessage: string | null;
     validityValid: boolean;
 }

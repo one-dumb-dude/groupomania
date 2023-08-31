@@ -1,15 +1,15 @@
 import userMutations from './mutations';
 import userActions from './actions';
-import {userStore} from "../../types/userStore";
 
 const User = {
     namespaced: true,
-    state: (): userStore => ({
+    state: () => ({
         user_id: null,
         username: null,
         loginStatus : 'idle',
         loginErrorMessage: null,
-        signupSuccessMessage: null
+        signupSuccessMessage: null,
+        signupErrorMessage: null
     }),
     mutations: userMutations,
     actions: userActions
