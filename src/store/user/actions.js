@@ -28,7 +28,6 @@ const userActions = {
                 await router.push('/');
             }
         } catch (err) {
-            console.error('Error: ', err);
             const responseMessage = err?.response?.data?.message;
             commit('SET_SIGNUP_ERROR_MESSAGE', responseMessage || 'Error Signing up');
         }

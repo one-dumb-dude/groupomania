@@ -15,6 +15,15 @@ const userMutations = {
     },
     SET_SIGNUP_ERROR_MESSAGE(state, payload) {
         state.signupErrorMessage = payload;
+    },
+    CLEAR_LOGIN_ERROR_MESSAGE(state) {
+        state.loginErrorMessage = null;
+    },
+    CLEAR_SIGNUP_SUCCESS_MESSAGE(state) {
+        state.signupSuccessMessage = null;
+    },
+    CLEAR_SIGNUP_ERROR_MESSAGE(state) {
+        state.signupErrorMessage = null;
     }
 }
 

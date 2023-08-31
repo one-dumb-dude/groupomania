@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {useRouter} from "vue-router";
 import {useStore} from "vuex";
-import {computed, reactive} from "vue";
+import {computed, onBeforeMount, onBeforeUnmount, reactive} from "vue";
 
 const store = useStore();
 
@@ -22,11 +22,17 @@ const handleSignUp = () => {
 const handleLogin = async () => {
   await store.dispatch('user/loginUser', {username: state.username, password: state.password});
 }
+
+onBeforeUnmount(() => {
+  store.commit('user/CLEAR_SIGNUP_SUCCESS_MESSAGE');
+  store.commit('user/CLEAR_LOGIN_ERROR_MESSAGE');
+});
+
 </script>
 
 <template>
   <div id="login__main">
-    <form id="login__form" @submit.prevent>
+    <form id="login__form" @submit.prevent @click="store.state.user.signupSuccessMessage ? store.commit('user/CLEAR_SIGNUP_SUCCESS_MESSAGE') : null">
       <label for="username">Username:</label>
       <input type="text" name="username" v-model="state.username" />
       <label for="password">Password:</label>
@@ -34,8 +40,8 @@ const handleLogin = async () => {
       <button type="button" @click="handleSignUp">Sign-Up</button>
       <button type="submit" @click="handleLogin">Login</button>
     </form>
-    <h4 id="message__login_error" v-if="loginErrorMessage">{{loginErrorMessage}}</h4>
-    <span id="message__signup_success" v-if="signupSuccessMessage">{{signupSuccessMessage}}</span>
+    <h4 id="message__loginError" v-if="loginErrorMessage">{{loginErrorMessage}}</h4>
+    <span id="message__signupSuccess" v-if="signupSuccessMessage">{{signupSuccessMessage}}</span>
   </div>
 </template>
 
@@ -63,11 +69,12 @@ const handleLogin = async () => {
         cursor: pointer
 
 #message
-  &__login_error
+  &__loginError
     font-family: sans-serif
     color: red
 
-  &__signup_success
+  &__signupSuccess
     font-family: sans-serif
-    color: lawngreen
+    font-weight: bold
+    color: #0fdd45
 </style>

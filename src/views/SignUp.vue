@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {computed, reactive, ref} from "vue";
+import {computed, onBeforeUnmount, reactive, ref} from "vue";
 import {useRouter} from "vue-router";
 import {useStore} from "vuex";
 import {Signup} from '@/types';
@@ -9,6 +9,10 @@ const passwordRef = ref(null);
 
 const store = useStore();
 const router = useRouter();
+
+onBeforeUnmount(() => {
+  store.commit('user/CLEAR_SIGNUP_ERROR_MESSAGE');
+});
 
 const state = reactive<Signup>({
   username: null,
