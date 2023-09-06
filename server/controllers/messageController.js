@@ -20,7 +20,6 @@ const getAllMessages = (req, res) => {
 };
 
 const insertAMessage = (req, res) => {
-    console.log('Attempting to insert a message!');
 
     const data = {
         user_id: req.body.user_id,
@@ -31,7 +30,6 @@ const insertAMessage = (req, res) => {
         .insert(data)
         .returning(['user_id', 'message_id', 'text'])
         .then((info) => {
-            console.log('data inserted: ', info);
             res.status(201).send({message: info});
         })
         .catch((err) => {

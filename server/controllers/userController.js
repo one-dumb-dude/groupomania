@@ -1,5 +1,6 @@
 const knex = require('../knex/knex');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const signUpUser = async (req, res) => {
     const {username, password} = req.body;
@@ -67,7 +68,15 @@ const loginUser = async (req, res) => {
             if (err) return res.status(401).json({message: 'Invalid username or password'});
 
             if (result) {
-                return res.status(200).json(userInfo);
+
+                const payload = {
+                    user_id: userInfo.user_id,
+                    username: userInfo.username
+                }
+
+                const token = jwt.sign(payload, process.env.JWT_SECRET_KEY, {expiresIn: '1h'});
+
+                return res.status(200).json({...payload, token});
             } else {
                 return res.status(401).json({message: 'Invalid Credentials'});
             }

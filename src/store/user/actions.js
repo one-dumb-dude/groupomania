@@ -7,6 +7,11 @@ const userActions = {
     async loginUser({commit}, payload) {
         try{
             const response = await axios.post(`${nodeServer}/api/users/login`, payload);
+
+            const token = response.data.token;
+
+            localStorage.setItem('jwtToken', token);
+
             commit('SET_USER_DATA', response.data);
             commit('SET_LOGIN_STATUS', 'success');
             commit('SET_LOGIN_ERROR_MESSAGE', null);
