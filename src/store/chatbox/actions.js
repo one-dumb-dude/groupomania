@@ -3,8 +3,19 @@ import axios from 'axios';
 const chatboxActions = {
     async postMessage({commit, dispatch}, payload) {
         try {
-            await axios.post('http://localhost:3001/api/messages', payload);
-            console.log(payload)
+            const token = localStorage.getItem('jwtToken');
+
+            if (!token) {
+                console.error('No token found');
+                return;
+            }
+
+            await axios.post('http://localhost:3001/api/messages', payload, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
             await dispatch('chatviewer/fetchMessages', null, {root: 'true'});
         } catch (error) {
             console.error('Error: ', error);
