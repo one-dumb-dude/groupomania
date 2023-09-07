@@ -5,12 +5,23 @@ import ChatViewer from "@/components/ChatViewer.vue";
 </script>
 
 <template>
-  <router-link to="/userprofile">User Profile</router-link>
-  <ChatViewer />
-  <Chatbox />
+  <section>
+    <div>
+      <ChatViewer />
+      <Chatbox />
+    </div>
+  </section>
 </template>
 
 <style lang="sass" scoped>
+section
+  display: flex
+  justify-content: center
+  align-items: center
+  width: 100%
+
+  &> div
+    width: 50%
   h2
     font-size: 55px
     color: red

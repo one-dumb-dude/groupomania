@@ -23,6 +23,11 @@ const userActions = {
         }
     },
 
+    async logoutUser({commit}) {
+        localStorage.removeItem('jwtToken');
+        commit('CLEAR_USER_DATA');
+    },
+
     async signupUser({commit}, payload) {
         try{
             const response = await axios.post(`${nodeServer}/api/users/signup`, payload);

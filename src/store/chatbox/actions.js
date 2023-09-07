@@ -4,6 +4,7 @@ const chatboxActions = {
     async postMessage({commit, dispatch}, payload) {
         try {
             await axios.post('http://localhost:3001/api/messages', payload);
+            console.log(payload)
             await dispatch('chatviewer/fetchMessages', null, {root: 'true'});
         } catch (error) {
             console.error('Error: ', error);

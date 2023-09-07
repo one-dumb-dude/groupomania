@@ -27,6 +27,15 @@ const handleSubmit = () => {
   <h5 v-if="loginErrorMessage !== null">{{loginErrorMessage.error.message}}</h5>
 </template>
 
-<style lang="sass">
+<style lang="sass" scoped>
+form
+  display: flex
+  width: 100%
+
+  input
+    flex: 1
+
+  button
+    flex: 0 0 33.33%
 
 </style>

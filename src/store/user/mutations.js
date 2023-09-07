@@ -7,6 +7,10 @@ const userMutations = {
         state.user_id = payload.user_id;
         state.username = payload.username;
     },
+    CLEAR_USER_DATA(state) {
+        state.user_id = null;
+        state.username = null;
+    },
     SET_LOGIN_ERROR_MESSAGE(state, payload) {
         state.loginErrorMessage = payload;
     },
