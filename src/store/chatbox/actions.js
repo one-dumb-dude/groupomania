@@ -5,6 +5,8 @@ const chatboxActions = {
         try {
             const token = localStorage.getItem('jwtToken');
 
+            const userId = {user_id: payload.user_id};
+
             if (!token) {
                 console.error('No token found');
                 return;
@@ -16,7 +18,7 @@ const chatboxActions = {
                 }
             });
 
-            await dispatch('chatviewer/fetchMessages', null, {root: 'true'});
+            await dispatch('chatviewer/fetchMessages', userId, {root: 'true'});
         } catch (error) {
             console.error('Error: ', error);
             commit('SET_LOGIN_ERROR_MESSAGE', {error});
