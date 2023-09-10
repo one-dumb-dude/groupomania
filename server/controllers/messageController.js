@@ -20,7 +20,6 @@ const getAllMessages = (req, res) => {
 };
 
 const insertAMessage = (req, res) => {
-
     const data = {
         user_id: req.body.user_id,
         text: req.body.text

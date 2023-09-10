@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const chatViewerActions = {
-    async fetchMessages({commit}) {
+    async fetchMessages({commit}, payload) {
         try {
             const token = localStorage.getItem('jwtToken');
 
@@ -11,6 +11,7 @@ const chatViewerActions = {
             }
 
             const response = await axios.get('http://localhost:3001/api/messages', {
+                params: payload,
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }

@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 
-function verifyToken(req, res, next) {
+function verifyJWT(req, res, next) {
+
     const token = req.header('Authorization')?.split(' ')[1];
 
     if (!token) {
@@ -8,12 +9,25 @@ function verifyToken(req, res, next) {
     }
 
     try {
-        req.user = jwt.verify(token, process.env.JWT_SECRET_KEY);
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET_KEY);
 
+        // let incomingUserId;
+        //
+        // if (req.method === 'GET') {
+        //     incomingUserId = req.query?.user_id;
+        // } else {
+        //     incomingUserId = req.body?.user_id;
+        // }
+        //
+        // if (incomingUserId !== decodedToken.user_id) {
+        //     res.status(403).send({message: 'Token mismatch'});
+        // }
+
+        req.user = decodedToken;
         next();
     } catch (error) {
         res.status(400).json({message: 'Invalid token.'});
     }
 }
 
-module.exports = verifyToken;
+module.exports = verifyJWT;

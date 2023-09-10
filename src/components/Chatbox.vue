@@ -5,7 +5,7 @@ import {computed, reactive} from 'vue';
 const store = useStore();
 
 const loginErrorMessage = computed(() => store.state.chatbox.loginErrorMessage);
-const user = computed(() => store.state.user)
+const user = computed(() => store.state.user);
 
 const state = reactive({
   inputValue: ''

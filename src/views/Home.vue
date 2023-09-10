@@ -20,7 +20,10 @@ section
   align-items: center
   width: 100%
 
-  &> div
+  & > div
+    display: flex
+    flex-direction: column
+    grid-row-gap: 40px
     width: 50%
   h2
     font-size: 55px
