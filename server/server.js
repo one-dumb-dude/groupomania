@@ -14,11 +14,21 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
+function logRegFile(req, res, next) {
+    console.log('----- check req file ------');
+    console.log(req);
+    next();
+}
+
 const messageRoutes = require('./routes/messages');
 const userRoutes = require('./routes/users');
 
+app.use(logRegFile);
+
 app.use('/api/users', userRoutes);
 app.use('/api/messages', verifyJWT, messageRoutes);
+
+
 
 app.listen(port, () => {
     console.log(`Running Node Express on port: ${port}`)

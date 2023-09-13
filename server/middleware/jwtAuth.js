@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 function verifyJWT(req, res, next) {
-
+    console.log(req.file)
     const token = req.header('Authorization')?.split(' ')[1];
 
     if (!token) {

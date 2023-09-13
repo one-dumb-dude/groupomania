@@ -25,6 +25,12 @@ const insertAMessage = (req, res) => {
         text: req.body.text
     };
 
+    console.log('--the funk soul brother---');
+    console.log(req.body.file)
+    if (req.body.file) {
+        console.log(req.body.file.filename)
+    }
+
     knex('message')
         .insert(data)
         .returning(['user_id', 'message_id', 'text'])
