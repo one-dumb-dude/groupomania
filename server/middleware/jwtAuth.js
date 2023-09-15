@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
 
 function verifyJWT(req, res, next) {
-    console.log(req.file)
     const token = req.header('Authorization')?.split(' ')[1];
 
     if (!token) {
@@ -11,19 +10,29 @@ function verifyJWT(req, res, next) {
     try {
         const decodedToken = jwt.verify(token, process.env.JWT_SECRET_KEY);
 
+        if (req.is('multipart/form-data')) {
+            console.log('this was form-data');
+            return next();
+        }
+
         let incomingUserId;
 
         if (req.method === 'GET') {
             incomingUserId = Number(req.query?.user_id);
         } else {
-            incomingUserId = req.body?.user_id;
+            incomingUserId = Number(req.body?.user_id);
         }
 
         if (incomingUserId !== decodedToken.user_id) {
             return res.status(403).send({message: 'Token mismatch'});
         }
 
-        req.user = decodedToken;
+        // Attaching properties to the 'req' object is a common convention in Express.
+        // It allows middleware functions to preprocess the incoming request and provide
+        // computed or retrieved data for subsequent middlewares or route handlers.
+        // In this case, 'req.user' represents the authenticated user for this request.
+
+        // req.user = decodedToken;
         next();
     } catch (error) {
         return res.status(400).json({message: 'Invalid token.'});

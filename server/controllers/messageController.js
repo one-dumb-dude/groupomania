@@ -25,10 +25,11 @@ const insertAMessage = (req, res) => {
         text: req.body.text
     };
 
-    console.log('--the funk soul brother---');
-    console.log(req.body.file)
-    if (req.body.file) {
-        console.log(req.body.file.filename)
+    console.log('-- inserting a message ---');
+
+    if (req.file) {
+        console.log('found a file while inserting message!');
+        console.log(req.file.filename)
     }
 
     knex('message')

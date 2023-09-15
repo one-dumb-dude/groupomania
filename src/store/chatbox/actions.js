@@ -5,12 +5,12 @@ const chatboxActions = {
         try {
             const token = localStorage.getItem('jwtToken');
 
-            const userId = {user_id: payload.user_id};
-
             if (!token) {
                 console.error('No token found');
                 return;
             }
+
+            const userId = payload instanceof FormData ? payload.get('user_id') : payload.user_id;
 
             await axios.post('http://localhost:3001/api/messages', payload, {
                 headers: {
@@ -18,7 +18,9 @@ const chatboxActions = {
                 }
             });
 
-            await dispatch('chatviewer/fetchMessages', userId, {root: 'true'});
+            const userObj = { user_id: userId };
+
+            await dispatch('chatviewer/fetchMessages', userObj, {root: 'true'});
         } catch (error) {
             console.error('Error: ', error);
             commit('SET_LOGIN_ERROR_MESSAGE', {error});

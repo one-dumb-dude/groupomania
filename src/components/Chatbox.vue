@@ -19,25 +19,31 @@ const handleSubmit = () => {
     return;
   }
 
-  const payload = {
-    user_id: user.value.user_id,
-    text: state.inputValue
-  }
+  let payload;
 
   if (imageInputRef.value && imageInputRef.value.files.length > 0) {
-    payload['file'] = imageInputRef.value.files[0];
-    console.log(imageInputRef.value.files[0])
+    const formData = new FormData();
+    formData.append('user_id', user.value.user_id);
+    formData.append('text', state.inputValue);
+    formData.append('image', imageInputRef.value.files[0])
+    payload = formData;
+  } else {
+    payload = {
+      user_id: user.value.user_id,
+      text: state.inputValue
+    }
   }
 
-  if (state.inputValue !== '') {
-    store.dispatch('chatbox/postMessage', payload);
-    state.inputValue = '';
-  }
+  store.dispatch('chatbox/postMessage', payload);
+  // clear input values
+  imageInputRef.value.value = null;
+  state.inputValue = '';
+
 }
 </script>
 
 <template>
-  <form @submit.prevent="handleSubmit" class="send-form" enctype="multipart/form-data">
+  <form @submit.prevent="handleSubmit" class="send-form">
     <div class="send-form__image-upload">
       <label class="send-form__image-upload-label" for="upload-image">Upload Image</label>
       <input id="upload-image" class="send-form__image-upload-input" type="file" name="image" accept="image/*" ref="imageInputRef">
