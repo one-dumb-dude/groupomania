@@ -24,7 +24,7 @@ section
     display: flex
     flex-direction: column
     grid-row-gap: 40px
-    width: 50%
+    width: 90%
   h2
     font-size: 55px
     color: red

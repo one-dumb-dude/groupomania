@@ -4,6 +4,7 @@ const messageRoutes = require('./routes/messages');
 const userRoutes = require('./routes/users');
 const express = require('express');
 const cors = require('cors');
+const {join} = require('path');
 const app = express();
 const port = process.env.NODE_PORT || 3000
 
@@ -22,6 +23,8 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+
+app.use('/public/images', express.static(join(__dirname, 'upload')))
 
 app.use('/api/users', userRoutes);
 app.use('/api/messages', messageRoutes);

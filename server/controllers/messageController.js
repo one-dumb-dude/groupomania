@@ -4,6 +4,7 @@ const getAllMessages = (req, res) => {
     knex.select(
         'u.username',
         'm.text',
+        'm.image_url',
         'm.created_at',
         'm.updated_at'
     )
@@ -28,13 +29,12 @@ const insertAMessage = (req, res) => {
     console.log('-- inserting a message ---');
 
     if (req.file) {
-        console.log('found a file while inserting message!');
-        console.log(req.file.filename)
+        data.image_url = `${process.env.LOCAL_SERVER_URL}/${req.file.filename}`;
     }
 
     knex('message')
         .insert(data)
-        .returning(['user_id', 'message_id', 'text'])
+        .returning(['user_id', 'message_id', 'image_url', 'text'])
         .then((info) => {
             res.status(201).send({message: info});
         })
