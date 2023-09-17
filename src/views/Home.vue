@@ -5,8 +5,8 @@ import ChatViewer from "@/components/ChatViewer.vue";
 </script>
 
 <template>
-  <section>
-    <div>
+  <section class="home">
+    <div class="home__wrapper">
       <ChatViewer />
       <Chatbox />
     </div>
@@ -14,18 +14,15 @@ import ChatViewer from "@/components/ChatViewer.vue";
 </template>
 
 <style lang="sass" scoped>
-section
+.home
   display: flex
   justify-content: center
   align-items: center
   width: 100%
 
-  & > div
+  &__wrapper
     display: flex
     flex-direction: column
     grid-row-gap: 40px
     width: 90%
-  h2
-    font-size: 55px
-    color: red
 </style>

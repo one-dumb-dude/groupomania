@@ -3,14 +3,14 @@ import Navbar from '@/views/Navbar.vue';
 </script>
 
 <template>
-  <main>
+  <main class="main">
     <Navbar/>
     <router-view></router-view>
   </main>
 </template>
 
 <style lang="sass" scoped>
-main
+.main
   display: flex
   flex-direction: column
   width: 100vw
