@@ -8,6 +8,7 @@ const User = {
         username: null,
         loginStatus : 'idle',
         loginErrorMessage: null,
+        deleteUserResponseMessage: null,
         signupSuccessMessage: null,
         signupErrorMessage: null
     }),

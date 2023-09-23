@@ -17,6 +17,10 @@ function toggleEditable() {
   state.isEditable = !state.isEditable
 }
 
+function deleteUserAccount() {
+  store.dispatch('user/deleteUser', user.value.user_id)
+}
+
 </script>
 
 <template>
@@ -33,6 +37,7 @@ function toggleEditable() {
       <label for="email">Email</label>
       <input type="text" name="email" v-model="state.editableEmail" :readonly="!state.isEditable">
 
+      <button type="button" @click="deleteUserAccount">Delete User Account</button>
     </form>
   </div>
 </template>

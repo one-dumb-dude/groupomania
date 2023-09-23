@@ -88,7 +88,25 @@ const loginUser = async (req, res) => {
 
 }
 
+const deleteUser = async (req, res) => {
+    const authUserId = req.auth.user_id;
+    try {
+        const result = await knex('user')
+            .where('user_id', authUserId)
+            .del();
+        if (result === 0) {
+            return res.status(404).json({message: 'User not found'});
+        } else {
+            return res.status(200).json({message: 'User Deleted'});
+        }
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({message: 'An error occurred deleting user'});
+    }
+}
+
 module.exports = {
     signUpUser,
-    loginUser
+    loginUser,
+    deleteUser
 }

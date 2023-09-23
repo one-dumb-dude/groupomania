@@ -20,6 +20,9 @@ const userMutations = {
     SET_SIGNUP_ERROR_MESSAGE(state, payload) {
         state.signupErrorMessage = payload;
     },
+    SET_DELETE_USER_RESPONSE_MESSAGE(state, payload) {
+        state.deleteUserResponseMessage = payload;
+    },
     CLEAR_LOGIN_ERROR_MESSAGE(state) {
         state.loginErrorMessage = null;
     },

@@ -19,6 +19,8 @@ function verifyJWT(req, res, next) {
 
         if (req.method === 'GET') {
             incomingUserId = Number(req.query?.user_id);
+        } else if (req.method === 'DELETE') {
+            incomingUserId = Number(req.params?.userId)
         } else {
             incomingUserId = Number(req.body?.user_id);
         }
@@ -30,9 +32,9 @@ function verifyJWT(req, res, next) {
         // Attaching properties to the 'req' object is a common convention in Express.
         // It allows middleware functions to preprocess the incoming request and provide
         // computed or retrieved data for subsequent middlewares or route handlers.
-        // In this case, 'req.user' represents the authenticated user for this request.
+        // In this case, 'req.auth' represents the authenticated user for this request.
 
-        // req.user = decodedToken;
+        req.auth = decodedToken;
         next();
     } catch (error) {
         return res.status(400).json({message: 'Invalid token.'});

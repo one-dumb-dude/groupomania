@@ -41,6 +41,26 @@ const userActions = {
             const responseMessage = err?.response?.data?.message;
             commit('SET_SIGNUP_ERROR_MESSAGE', responseMessage || 'Error Signing up');
         }
+    },
+
+    async deleteUser({commit}, userId) {
+        try {
+            const token = localStorage.getItem('jwtToken');
+
+            if (!token) {
+                console.error('No token found');
+                return;
+            }
+            const response = await axios.delete(`${nodeServer}/api/users/${userId}`, {
+                headers: `Authorization: Bearer ${token}`
+            });
+
+            const responseMessage = response?.data?.message || 'Error deleting user account';
+
+        } catch (err) {
+            const responseMessage = err?.response?.data?.message;
+            commit('SET_DELETE_USER_RESPONSE_MESSAGE', responseMessage || 'Error deleting user account');
+        }
     }
 }
 

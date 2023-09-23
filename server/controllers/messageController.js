@@ -17,7 +17,6 @@ const getAllMessages = (req, res) => {
             console.error('Error:', error);
             res.status(500).json({message: 'Error getting messages'});
         });
-
 };
 
 const insertAMessage = (req, res) => {
@@ -25,8 +24,6 @@ const insertAMessage = (req, res) => {
         user_id: req.body.user_id,
         text: req.body.text
     };
-
-    console.log('-- inserting a message ---');
 
     if (req.file) {
         data.image_url = `${process.env.LOCAL_SERVER_URL}/${req.file.filename}`;

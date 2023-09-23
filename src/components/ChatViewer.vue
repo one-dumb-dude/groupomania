@@ -20,28 +20,6 @@ onMounted(() => {
   store.dispatch('chatviewer/fetchMessages', { user_id: user.value.user_id });
 });
 
-function formatDate(timestamp) {
-  const months = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."];
-
-  const date = new Date(timestamp);
-
-  const year = date.getUTCFullYear();
-  const month = months[date.getUTCMonth()];
-  const day = date.getUTCDate();
-  let hours = date.getUTCHours();
-  const minutes = String(date.getUTCMinutes()).padStart(2, '0');
-  const seconds = String(date.getUTCSeconds()).padStart(2, '0');
-  const ampm = hours >= 12 ? 'pm' : 'am';
-
-  if (hours > 12) {
-    hours -= 12;
-  } else if (hours === 0) {
-    hours = 12;
-  }
-
-  return ` ${month}${day}, ${year} ${hours}:${minutes}:${seconds}${ampm}`;
-}
-
 function timeSince(timestamp) {
   const now = new Date();
   const past = new Date(timestamp);
