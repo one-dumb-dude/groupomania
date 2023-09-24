@@ -7,6 +7,8 @@ const store = useStore();
 
 const user = computed(()=> store.state.user as UserProfile);
 
+const deleteAccountMessage = computed(() => store.state.user.deleteUserResponseMessage);
+
 const state = reactive({
   isEditable: false,
   editableUsername: user.value.username,
@@ -18,7 +20,7 @@ function toggleEditable() {
 }
 
 function deleteUserAccount() {
-  store.dispatch('user/deleteUser', user.value.user_id)
+  store.dispatch('user/deleteUser', user.value.user_id);
 }
 
 </script>
@@ -39,6 +41,7 @@ function deleteUserAccount() {
 
       <button type="button" @click="deleteUserAccount">Delete User Account</button>
     </form>
+    <div v-if="deleteAccountMessage">{{deleteAccountMessage}}</div>
   </div>
 </template>
 

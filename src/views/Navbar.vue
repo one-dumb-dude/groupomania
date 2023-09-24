@@ -13,7 +13,7 @@ const showLogout = computed(() => {
 
 function logout() {
   store.dispatch('user/logoutUser');
-  router.push('/')
+  router.push('/');
 }
 </script>
 

@@ -25,6 +25,7 @@ const userActions = {
 
     async logoutUser({commit}) {
         localStorage.removeItem('jwtToken');
+        commit('SET_LOGIN_STATUS', 'idle');
         commit('CLEAR_USER_DATA');
     },
 
@@ -56,6 +57,14 @@ const userActions = {
             });
 
             const responseMessage = response?.data?.message || 'Error deleting user account';
+
+            localStorage.removeItem('jwtToken');
+
+            commit('SET_LOGIN_STATUS', 'idle');
+            commit('CLEAR_USER_DATA');
+            commit('SET_LOGIN_ERROR_MESSAGE', responseMessage || 'Login Failed');
+
+            await router.push('/');
 
         } catch (err) {
             const responseMessage = err?.response?.data?.message;
