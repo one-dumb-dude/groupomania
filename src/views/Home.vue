@@ -1,13 +1,16 @@
 <script lang="ts" setup>
 import Chatbox from '@/components/Chatbox.vue';
 import ChatViewer from "@/components/ChatViewer.vue";
+import Posts from "@/components/Posts.vue";
 
 </script>
 
 <template>
   <section class="home">
+    <button>New Thread</button>
     <div class="home__wrapper">
-      <ChatViewer />
+      <Posts />
+<!--      <ChatViewer />-->
       <Chatbox />
     </div>
   </section>
@@ -16,6 +19,7 @@ import ChatViewer from "@/components/ChatViewer.vue";
 <style lang="sass" scoped>
 .home
   display: flex
+  flex-direction: column
   justify-content: center
   align-items: center
   width: 100%
