@@ -5,6 +5,7 @@ import SignUp from '@/views/SignUp.vue';
 import Posts from '@/components/Posts.vue';
 import UserProfile from '@/views/UserProfile.vue';
 import PostDetail from '@/components/PostDetail.vue';
+import CreatePost from '@/views/CreatePost.vue';
 
 const routes = [
     {
@@ -16,25 +17,31 @@ const routes = [
         path: '/home',
         name: 'Home',
         component: Home,
-        meta: { requiresAuth: true}
+        meta: {requiresAuth: true}
     },
     {
         path: '/posts',
         name: 'Posts',
         component: Posts,
-        meta: { requiresAuth: true}
+        meta: {requiresAuth: true}
+    },
+    {
+        path: '/create-a-post',
+        name: 'CreatePost',
+        component: CreatePost,
+        meta: {requiresAuth: true}
     },
     {
         path: '/post/:postId',
         name: 'post-detail',
         component: PostDetail,
-        meta: { requiresAuth: true}
+        meta: {requiresAuth: true}
     },
     {
         path: '/userprofile',
         name: 'UserProfile',
         component: UserProfile,
-        meta: { requiresAuth: true}
+        meta: {requiresAuth: true}
     },
     {
         path: '/signup',
@@ -48,21 +55,21 @@ const router = createRouter({
     routes
 });
 
-router.beforeEach((to,from,next) => {
-   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
-   const isAuthenticated = localStorage.getItem('jwtToken');
+router.beforeEach((to, from, next) => {
+    const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+    const isAuthenticated = localStorage.getItem('jwtToken');
 
-   if (to.path === '/') {
-       if (isAuthenticated) {
-           next('/home');
-       } else {
-           next('/login');
-       }
-   } else if (requiresAuth && !isAuthenticated) {
-       next('/login');
-   } else {
-       next();
-   }
+    if (to.path === '/') {
+        if (isAuthenticated) {
+            next('/home');
+        } else {
+            next('/login');
+        }
+    } else if (requiresAuth && !isAuthenticated) {
+        next('/login');
+    } else {
+        next();
+    }
 });
 
 export default router;

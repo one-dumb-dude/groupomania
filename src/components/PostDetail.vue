@@ -11,10 +11,6 @@ const userId = store.state.user.user_id;
 const postData = computed(() => store.state.post.postData as Post);
 const comments = computed(() => store.state.post.comments as Comment[]);
 
-watch(postData, (newValue, oldValue) => {
-  console.log('Post changed:', newValue.content);
-});
-
 onMounted(async () => {
   await store.dispatch('post/getAPost', {user_id: userId, post_id: postId});
 });

@@ -11,7 +11,7 @@ import Posts from "@/components/Posts.vue";
     <div class="home__wrapper">
       <Posts />
 <!--      <ChatViewer />-->
-      <Chatbox />
+<!--      <Chatbox />-->
     </div>
   </section>
 </template>

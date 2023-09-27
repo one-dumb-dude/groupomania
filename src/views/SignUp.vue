@@ -2,6 +2,7 @@
 import {computed, onBeforeUnmount, reactive, ref} from "vue";
 import {useRouter} from "vue-router";
 import {useStore} from "vuex";
+import {onInputChange} from "@/utils/formValidation";
 import {Signup} from '@/types';
 
 const usernameRef = ref(null);
@@ -27,26 +28,6 @@ const state = reactive<Signup>({
   confirmPassword: null,
   validityValid: false
 });
-
-const onInputChange = (inputReference, labelNameOfInput) => {
-  const validity = inputReference.validity;
-  state.validityValid = validity.valid;
-
-  const labelNameOfInputUppercase = `${labelNameOfInput.charAt(0).toUpperCase() + labelNameOfInput.slice(1)}`;
-  const statePropertyErrorMessage = `${labelNameOfInput}ErrorMessage`;
-
-  if (!validity.valid) {
-    if (validity.tooShort) {
-      state[statePropertyErrorMessage] = `${labelNameOfInputUppercase} too short`;
-    } else if (validity.tooLong) {
-      state[statePropertyErrorMessage] = `${labelNameOfInputUppercase} too long`;
-    } else if (validity.patternMismatch) {
-      state[statePropertyErrorMessage] = `${labelNameOfInputUppercase} should be alphanumeric`;
-    }
-  } else {
-    state[statePropertyErrorMessage] = null;
-  }
-};
 
 const passwordMatch = computed(() => {
   return state.password === state.confirmPassword
@@ -77,8 +58,8 @@ const onSubmit = async (event) => {
              :minlength="state.usernameMinLength"
              :maxlength="state.usernameMaxLength"
              :pattern="state.usernameRegExp"
-             @input="onInputChange(usernameRef, 'username')"
-             @blur="onInputChange(usernameRef, 'username')"
+             @input="onInputChange(usernameRef, 'username', state)"
+             @blur="onInputChange(usernameRef, 'username', state)"
              v-model="state.username"
              required/>
       <span v-if="state.usernameErrorMessage">{{ state.usernameErrorMessage }}</span>
@@ -90,8 +71,8 @@ const onSubmit = async (event) => {
              name="password"
              :minlength="state.passwordMinLength"
              :maxlength="state.passwordMaxLength"
-             @input="onInputChange(passwordRef, 'password')"
-             @blur="onInputChange(passwordRef, 'password')"
+             @input="onInputChange(passwordRef, 'password', state)"
+             @blur="onInputChange(passwordRef, 'password', state)"
              v-model="state.password"
              autocomplete="new-password"
              required/>
