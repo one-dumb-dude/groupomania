@@ -4,6 +4,7 @@ import Login from '@/views/Login.vue';
 import SignUp from '@/views/SignUp.vue';
 import Posts from '@/components/Posts.vue';
 import UserProfile from '@/views/UserProfile.vue';
+import PostDetail from '@/components/PostDetail.vue';
 
 const routes = [
     {
@@ -21,6 +22,12 @@ const routes = [
         path: '/posts',
         name: 'Posts',
         component: Posts,
+        meta: { requiresAuth: true}
+    },
+    {
+        path: '/post/:postId',
+        name: 'post-detail',
+        component: PostDetail,
         meta: { requiresAuth: true}
     },
     {
