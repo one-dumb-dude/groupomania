@@ -7,7 +7,6 @@ import Posts from "@/components/Posts.vue";
 
 <template>
   <section class="home">
-    <button>New Thread</button>
     <div class="home__wrapper">
       <Posts />
 <!--      <ChatViewer />-->

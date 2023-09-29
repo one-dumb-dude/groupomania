@@ -24,19 +24,22 @@ function navigateToLink(id) {
 <template>
   <h4>Groupomania:</h4>
   <div id="post-container" ref="postsContainer">
+    <div>
+      <router-link :to="{name: 'CreatePost'}">Create Post</router-link>
+    </div>
     <ul v-if="posts">
 
-        <li v-for="post in posts" :key="post.post_id" @click="navigateToLink(post.post_id)">
-          <div>
-            {{ post.username }}
-          </div>
-          <div>
-            {{ post.title }}
-          </div>
-          <div>
-            {{ post.content }}
-          </div>
-        </li>
+      <li v-for="post in posts" :key="post.post_id" @click="navigateToLink(post.post_id)">
+        <div>
+          {{ post.username }}
+        </div>
+        <div>
+          {{ post.title }}
+        </div>
+        <div>
+          {{ post.content }}
+        </div>
+      </li>
 
     </ul>
   </div>

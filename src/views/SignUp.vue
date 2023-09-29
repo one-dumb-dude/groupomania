@@ -46,7 +46,6 @@ const onSubmit = async (event) => {
 </script>
 
 <template>
-
   <div id="signup-form">
     <h2>Sign up</h2>
     <form @submit="onSubmit">
@@ -62,6 +61,7 @@ const onSubmit = async (event) => {
              @blur="onInputChange(usernameRef, 'username', state)"
              v-model="state.username"
              required/>
+
       <span v-if="state.usernameErrorMessage">{{ state.usernameErrorMessage }}</span>
 
       <label for="password">Password</label>
@@ -94,10 +94,11 @@ const onSubmit = async (event) => {
       <span v-if="store.state.user.signupErrorMessage">{{ store.state.user.signupErrorMessage }}</span>
     </form>
   </div>
-
 </template>
 
 <style lang="sass" scoped>
+@import '@/assets/styles/mixins'
+
 #signup-form
   display: flex
   flex-direction: column
@@ -113,14 +114,5 @@ const onSubmit = async (event) => {
     width: 300px
     height: max-content
 
-input:invalid
-  border: 2px solid red
-
-span
-  color: red
-  font-weight: bold
-  font-family: sans-serif
-  padding: 0
-  margin: 0
-
+@include validation-error
 </style>

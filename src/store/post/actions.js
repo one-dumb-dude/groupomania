@@ -52,6 +52,22 @@ const postActions = {
 
     async createPost({commit}, payload) {
         try {
+            const token = localStorage.getItem('jwtToken');
+
+            if (!token) {
+                console.error('No token found!');
+                return;
+            }
+
+            const response = await axios.post(`${nodeServer}/api/posts`, payload, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (response.status === 201 || response.status === 200) {
+                await router.push('/')
+            }
 
         } catch (err) {
         }
