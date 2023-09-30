@@ -3,9 +3,7 @@ const postMutations = {
         state.posts = payload;
     },
     LOAD_A_POST(state, payload) {
-        const {postData, comments} = payload;
-        state.postData = postData;
-        state.comments = comments;
+        state.postData = payload;
     }
 };
 

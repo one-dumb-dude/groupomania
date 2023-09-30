@@ -23,10 +23,11 @@ const postActions = {
             commit('LOAD_POSTS', response.data);
         } catch (err) {
             console.error('error', err);
+            // TODO: set error message
         }
     },
 
-    async getAPost({commit}, payload) {
+    async getPost({commit}, payload) {
         try {
             const token = localStorage.getItem('jwtToken');
 
@@ -44,9 +45,13 @@ const postActions = {
                 }
             });
 
-            commit('LOAD_A_POST', response.data);
+            const {postData, comments} = response.data;
+
+            commit('LOAD_A_POST', postData);
+            commit('comment/LOAD_COMMENTS', comments, { root: true });
         } catch (err) {
             console.error('Error getting a post');
+            // TODO: set error message
         }
     },
 
@@ -70,6 +75,8 @@ const postActions = {
             }
 
         } catch (err) {
+            console.error('Error creating a post');
+            // TODO: set error message
         }
     }
 

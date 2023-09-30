@@ -54,7 +54,6 @@ const handleSubmit = () => {
   imageInputRef.value.value = null;
   state.imgPreviewDataUrl = null;
   state.inputValue = '';
-
 }
 </script>
 

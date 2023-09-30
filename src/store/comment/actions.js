@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const commentActions = {
-    async postMessage({commit, dispatch}, payload) {
+    async createComment({commit, dispatch}, payload) {
         try {
             const token = localStorage.getItem('jwtToken');
 
@@ -10,20 +10,18 @@ const commentActions = {
                 return;
             }
 
-            const userId = payload instanceof FormData ? payload.get('user_id') : payload.user_id;
-
-            await axios.post('http://localhost:3001/api/comments', payload, {
+            const response = await axios.post('http://localhost:3001/api/comments', payload, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             });
 
-            const userObj = { user_id: userId };
-
-            await dispatch('chatviewer/fetchMessages', userObj, {root: 'true'});
+            if (response.status === 200 || response.status === 201) {
+                commit('LOAD_COMMENTS', response.data);
+            }
         } catch (error) {
             console.error('Error: ', error);
-            commit('SET_ERROR_MESSAGE', {error});
+            commit('SET_ERROR_MESSAGE', error.message || 'Error creating comment');
         }
     }
 };

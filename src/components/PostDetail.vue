@@ -10,7 +10,7 @@ const route = useRoute();
 const postId = route.params.postId;
 const userId = store.state.user.user_id;
 const postData = computed(() => store.state.post.postData as Post);
-const comments = computed(() => store.state.post.comments as Comment[]);
+const comments = computed(() => store.state.comment.comments as Comment[]);
 
 const state = reactive({
   textarea: null,
@@ -20,17 +20,22 @@ const state = reactive({
 });
 
 onMounted(async () => {
-  await store.dispatch('post/getAPost', {user_id: userId, post_id: postId});
+  await store.dispatch('post/getPost', {user_id: userId, post_id: postId});
 });
 
 function handleKeyDown(event) {
   if (event.key === 'Enter' && !event.shiftKey) {
-    createPost();
+    createComment();
   }
 }
 
-const createPost = () => {
-  alert(state.textarea)
+const createComment = () => {
+  const payload = {
+    user_id: userId,
+    post_id: postId,
+    comment: state.textarea
+  };
+  store.dispatch('comment/createComment', payload);
 }
 
 </script>
@@ -63,13 +68,15 @@ const createPost = () => {
   </div>
   <div class="create-comment">
     <form @submit.prevent class="create-comment__form">
-      <label class="create-comment__label">Create a comment</label>
-      <textarea v-model="state.textarea"
+      <label for="comment" class="create-comment__label">Create a comment</label>
+      <textarea id="comment"
                 class="create-comment__textarea"
                 placeholder="Enter comment"
+                name="comment"
                 rows="3"
+                v-model="state.textarea"
                 @keydown="handleKeyDown"></textarea>
-      <button class="create-comment__submit" type="submit" @click="createPost">Post comment</button>
+      <button class="create-comment__submit" type="submit" @click="createComment">Post comment</button>
     </form>
   </div>
 </template>
