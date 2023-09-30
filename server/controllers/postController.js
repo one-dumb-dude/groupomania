@@ -1,4 +1,5 @@
 const knex = require('../knex/knex');
+const commentService = require('../services/commentService');
 
 const getPosts = (req, res) => {
     knex.select(
@@ -34,18 +35,7 @@ const getAPost = async (req, res) => {
         .join('post as p', 'u.user_id', '=', 'p.user_id')
         .where('p.post_id', postId);
 
-    const commentResult = await knex.select(
-        'u.username',
-        'c.comment_id',
-        'c.text',
-        'c.image_url',
-        'c.created_at'
-    )
-        .from('comment as c')
-        .join('user as u', 'u.user_id', '=', 'c.user_id')
-        .where('c.post_id', postId)
-        .orderBy('c.created_at', 'asc');
-
+    const commentResult = await commentService.fetchComment(postId);
 
     if (!postResult || !commentResult) {
         return res.status(500).json({message: 'Error getting a post'});

@@ -1,18 +1,5 @@
 const knex = require('../knex/knex');
-
-const commentService = {
-    fetchComments: () => {
-        return knex.select(
-            'u.username',
-            'c.text',
-            'c.image_url',
-            'c.created_at',
-            'c.updated_at'
-        )
-            .from('user as u')
-            .join('comment as c', 'u.user_id', '=', 'c.user_id');
-    }
-};
+const commentService = require('../services/commentService');
 
 const getComments = (req, res) => {
     commentService.fetchComments()
@@ -26,16 +13,18 @@ const getComments = (req, res) => {
 };
 
 const createComment = (req, res) => {
+    const userId = req.body.post_id;
+
     const data = {
         user_id: req.auth.user_id,
-        post_id: req.body.post_id,
+        post_id: userId,
         text: req.body.comment
     };
 
     knex('comment')
         .insert(data)
         .then(() => {
-            return commentService.fetchComments();
+            return commentService.fetchComment(userId);
         })
         .then((allComments) => {
             res.status(201).json(allComments);

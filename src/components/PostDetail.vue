@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import {onMounted, computed, watch, reactive} from 'vue'
+// TODO: You need to perform input validation for the form
+import {onMounted, computed, watch, reactive, ref} from 'vue'
 import {useRoute} from 'vue-router'
 import {useStore} from 'vuex';
 import {Comment, Post} from "@/types";
@@ -9,6 +10,7 @@ const store = useStore();
 const route = useRoute();
 const postId = route.params.postId;
 const userId = store.state.user.user_id;
+const commentInputRef = ref(null);
 const postData = computed(() => store.state.post.postData as Post);
 const comments = computed(() => store.state.comment.comments as Comment[]);
 
@@ -36,6 +38,7 @@ const createComment = () => {
     comment: state.textarea
   };
   store.dispatch('comment/createComment', payload);
+  state.textarea = null;
 }
 
 </script>
@@ -53,17 +56,19 @@ const createComment = () => {
     </div>
 
     <h4>Comments</h4>
-    <ul v-if="comments && comments.length" class="comments">
-      <li class="comments__list" v-for="comment in comments" :key="comment.comment_id">
-        <div class="comments__row">
-          <span class="comments__username">{{ comment.username }}</span>
-          <span class="comments__created_at">{{ timeSince(comment.created_at) }}</span>
-        </div>
-        <div class="comments__text">{{ comment.text }}</div>
-      </li>
-    </ul>
-    <div v-else class="comments__message">
-      Be the first to comment!
+    <div class="comments__wrapper">
+      <ul v-if="comments && comments.length" class="comments">
+        <li class="comments__list" v-for="comment in comments" :key="comment.comment_id">
+          <div class="comments__row">
+            <span class="comments__username">{{ comment.username }}</span>
+            <span class="comments__created_at">{{ timeSince(comment.created_at) }}</span>
+          </div>
+          <div class="comments__text">{{ comment.text }}</div>
+        </li>
+      </ul>
+      <div v-else class="comments__message">
+        Be the first to comment!
+      </div>
     </div>
   </div>
   <div class="create-comment">
@@ -74,6 +79,7 @@ const createComment = () => {
                 placeholder="Enter comment"
                 name="comment"
                 rows="3"
+                ref="commentInputRef"
                 v-model="state.textarea"
                 @keydown="handleKeyDown"></textarea>
       <button class="create-comment__submit" type="submit" @click="createComment">Post comment</button>
@@ -93,6 +99,7 @@ const createComment = () => {
   row-gap: 15px
   margin: 50px auto
   width: 75%
+  overflow: hidden
 
   @include mixins.mobile_break
     row-gap: funcs.get-mobile-vw(15px)
@@ -179,6 +186,9 @@ const createComment = () => {
     @include mixins.mobile_break
       row-gap: funcs.get-mobile-vw(20px)
 
+    &__wrapper
+      overflow-y: scroll
+
     &__list
       display: flex
       flex-direction: column
@@ -191,6 +201,7 @@ const createComment = () => {
       display: flex
       align-items: center
       justify-content: space-between
+      padding-right: 20px
 
     &__username
       font-size: 20px
@@ -224,6 +235,7 @@ const createComment = () => {
   &__form
     display: flex
     flex-direction: column
+    row-gap: 10px
     width: 100%
 
   &__label

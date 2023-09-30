@@ -18,11 +18,11 @@ function logout() {
 </script>
 
 <template>
-  <nav>
-    <ul>
-      <li>{{store.state.user.username}}</li>
+  <nav class="nav">
+    <ul class="nav__list">
+      <li class="nav__username">{{store.state.user.username}}</li>
     </ul>
-    <menu>
+    <menu class="nav__menu">
       <li>
         <router-link to="/home">Home</router-link>
       </li>
@@ -30,14 +30,14 @@ function logout() {
         <router-link to="/userprofile">Userprofile</router-link>
       </li>
       <li v-if="showLogout">
-        <button @click="logout">Log Out</button>
+        <button class="nav__logout" @click="logout">Log Out</button>
       </li>
     </menu>
   </nav>
 </template>
 
 <style lang="sass" scoped>
-nav
+.nav
   display: flex
   justify-content: space-between
   align-items: center
@@ -46,13 +46,14 @@ nav
   padding: 20px 25px
   background-color: pink
 
-  & > ul
+  &__list
     margin: 0
     padding: 0
-    & > li
-      list-style-type: none
 
-  menu
+  &__username
+    list-style-type: none
+
+  &__menu
     display: flex
     justify-content: center
     align-items: center
@@ -60,7 +61,9 @@ nav
     margin: 0
     padding: 0
     width: max-content
-    li
-      list-style-type: none
+    list-style-type: none
+
+  &__logout
+    padding: 10px
 
 </style>
