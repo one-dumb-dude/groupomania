@@ -3,6 +3,7 @@ require('dotenv').config();
 const userRoutes = require('./routes/users');
 const postRoutes = require('./routes/posts');
 const messageRoutes = require('./routes/messages');
+const commentRoutes = require('./routes/comments');
 const express = require('express');
 const cors = require('cors');
 const {join} = require('path');
@@ -29,6 +30,7 @@ app.use('/public/images', express.static(join(__dirname, 'upload')))
 
 app.use('/api/users', userRoutes);
 app.use('/api/messages', messageRoutes);
+app.use('/api/comments', commentRoutes);
 app.use('/api/posts', postRoutes);
 
 app.listen(port, () => {

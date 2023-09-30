@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {onMounted, computed, watch} from 'vue'
+import {onMounted, computed, watch, reactive} from 'vue'
 import {useRoute} from 'vue-router'
 import {useStore} from 'vuex';
 import {Comment, Post} from "@/types";
@@ -12,19 +12,32 @@ const userId = store.state.user.user_id;
 const postData = computed(() => store.state.post.postData as Post);
 const comments = computed(() => store.state.post.comments as Comment[]);
 
+const state = reactive({
+  textarea: null,
+  textareaMinLength: 5,
+  textareaMaxLength: 200,
+  validityValid: false
+});
+
 onMounted(async () => {
   await store.dispatch('post/getAPost', {user_id: userId, post_id: postId});
 });
 
+function handleKeyDown(event) {
+  if (event.key === 'Enter' && !event.shiftKey) {
+    createPost();
+  }
+}
+
 const createPost = () => {
-  alert('chucha')
+  alert(state.textarea)
 }
 
 </script>
 
 <template>
   <div class="post-details">
-<!--    <h4>Post Details</h4>-->
+    <!--    <h4>Post Details</h4>-->
     <ul v-if="postData" class="post">
       <li class="post__username">{{ postData.username }}</li>
       <li class="post__title">{{ postData.title }}</li>
@@ -51,26 +64,40 @@ const createPost = () => {
   <div class="create-comment">
     <form @submit.prevent class="create-comment__form">
       <label class="create-comment__label">Create a comment</label>
-      <textarea class="create-comment__textarea" placeholder="Enter comment" rows="3"></textarea>
+      <textarea v-model="state.textarea"
+                class="create-comment__textarea"
+                placeholder="Enter comment"
+                rows="3"
+                @keydown="handleKeyDown"></textarea>
       <button class="create-comment__submit" type="submit" @click="createPost">Post comment</button>
     </form>
   </div>
 </template>
 
 <style lang="sass" scoped>
+@use '@/assets/styles/abstracts/mixins'
+@use '@/assets/styles/abstracts/functions' as funcs
+
 .post-details
+  flex: 1
   display: flex
   flex-direction: column
   justify-content: center
   row-gap: 15px
-  flex: 1
   margin: 50px auto
   width: 75%
+
+  @include mixins.mobile_break
+    row-gap: funcs.get-mobile-vw(15px)
+    margin: funcs.get-mobile-vw(50px) auto
 
   h4
     //font-weight: normal
     font-size: 22px
     text-align: center
+
+    @include mixins.mobile_break
+      font-size: funcs.get-mobile-vw(22px)
 
   .post, .comments
     list-style-type: none
@@ -80,10 +107,16 @@ const createPost = () => {
     font-weight: bold
     color: red
 
+    @include mixins.mobile_break
+      font-size: funcs.get-mobile-vw(24px)
+
   .post
     display: flex
     flex-direction: column
     row-gap: 10px
+
+    @include mixins.mobile_break
+      row-gap: funcs.get-mobile-vw(10px)
 
     &__username, &__title, &__content
       display: flex
@@ -91,12 +124,19 @@ const createPost = () => {
     &__username, &__title::before, &__content::before
       font-size: 14px
 
+      @include mixins.mobile_break
+        font-size: funcs.get-mobile-vw(14px)
+
     &__username
       flex-direction: row
       column-gap: 10px
       align-self: flex-end
       font-size: 18px
       font-weight: bold
+
+      @include mixins.mobile_break
+        column-gap: funcs.get-mobile-vw(10px)
+        font-size: funcs.get-mobile-vw(18px)
 
       &::before
         content: 'OP:'
@@ -106,12 +146,18 @@ const createPost = () => {
       font-size: 32px
       font-weight: bold
 
+      @include mixins.mobile_break
+        font-size: funcs.get-mobile-vw(32px)
+
       &::before
         content: 'Title'
 
     &__content
       flex-direction: column
       font-size: 18px
+
+      @include mixins.mobile_break
+        font-size: funcs.get-mobile-vw(18px)
 
       &::before
         content: 'Content'
@@ -123,11 +169,16 @@ const createPost = () => {
     justify-content: center
     row-gap: 20px
 
+    @include mixins.mobile_break
+      row-gap: funcs.get-mobile-vw(20px)
 
     &__list
       display: flex
       flex-direction: column
       row-gap: 10px
+
+      @include mixins.mobile_break
+        row-gap: funcs.get-mobile-vw(10px)
 
     &__row
       display: flex
@@ -138,18 +189,30 @@ const createPost = () => {
       font-size: 20px
       font-weight: bold
 
+      @include mixins.mobile_break
+        font-size: funcs.get-mobile-vw(20px)
+
     &__created_at
       font-size: 18px
+
+      @include mixins.mobile_break
+        font-size: funcs.get-mobile-vw(18px)
 
     &__text
       font-size: 18px
       width: 98%
       align-self: flex-end
 
+      @include mixins.mobile_break
+        font-size: funcs.get-mobile-vw(18px)
+
 .create-comment
   background-color: pink
   padding: 20px
   box-sizing: border-box
+
+  @include mixins.mobile_break
+    padding: funcs.get-mobile-vw(20px)
 
   &__form
     display: flex
@@ -160,6 +223,9 @@ const createPost = () => {
     font-size: 20px
     width: max-content
 
+    @include mixins.mobile_break
+      font-size: funcs.get-mobile-vw(20px)
+
   &__textarea
     resize: vertical
     width: 100%
@@ -168,5 +234,8 @@ const createPost = () => {
   &__submit
     padding: 10px 0
     cursor: pointer
+
+    @include mixins.mobile_break
+      padding: funcs.get-mobile-vw(10px) 0
 </style>
 

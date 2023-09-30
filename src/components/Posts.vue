@@ -46,6 +46,8 @@ function navigateToLink(id) {
 </template>
 
 <style lang="sass" scoped>
+@use '@/assets/styles/abstracts/mixins'
+
 h1
   font-size: 40px
   font-family: sans-serif
