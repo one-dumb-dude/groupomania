@@ -6,6 +6,7 @@ import Posts from '@/components/Posts.vue';
 import UserProfile from '@/views/UserProfile.vue';
 import PostDetail from '@/components/PostDetail.vue';
 import CreatePost from '@/views/CreatePost.vue';
+import {useStore} from 'vuex';
 
 const routes = [
     {
@@ -56,8 +57,11 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
+    const store = useStore();
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
     const isAuthenticated = localStorage.getItem('jwtToken');
+
+    const userId = store.state.user.user_id;
 
     if (to.path === '/') {
         if (isAuthenticated) {
@@ -65,7 +69,7 @@ router.beforeEach((to, from, next) => {
         } else {
             next('/login');
         }
-    } else if (requiresAuth && !isAuthenticated) {
+    } else if (requiresAuth && (!isAuthenticated || !userId)) {
         next('/login');
     } else {
         next();

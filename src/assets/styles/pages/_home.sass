@@ -1,0 +1,15 @@
+@use '../abstracts/variables' as vars
+@use '../abstracts/mixins'
+@use '../abstracts/functions' as funcs
+@use '../base/reset'
+@use '../base/base'
+
+#app
+
+  @include reset.reset-styles
+  @include base.global-text-styling
+
+  @include mixins.desktop_break
+    width: funcs.get-desktop-vw(vars.$desktop)
+
+  @include mixins.mobile_break

@@ -22,6 +22,7 @@ import Posts from "@/components/Posts.vue";
   justify-content: center
   align-items: center
   width: 100%
+  padding-bottom: 50px
 
   &__wrapper
     display: flex

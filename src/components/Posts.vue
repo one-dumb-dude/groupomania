@@ -22,23 +22,22 @@ function navigateToLink(id) {
 </script>
 
 <template>
-  <h4>Groupomania:</h4>
-  <div id="post-container" ref="postsContainer">
+  <h1>Groupomania</h1>
+  <div id="post-container" class="posts" ref="postsContainer">
     <div>
       <router-link :to="{name: 'CreatePost'}">Create Post</router-link>
     </div>
-    <ul v-if="posts">
-
-      <li v-for="post in posts" :key="post.post_id" @click="navigateToLink(post.post_id)">
-        <div>
+    <ul class="posts__order-list" v-if="posts">
+      <li class="posts__list" v-for="post in posts" :key="post.post_id" @click="navigateToLink(post.post_id)">
+        <strong class="posts__username">
           {{ post.username }}
-        </div>
-        <div>
+        </strong>
+        <h6 class="posts__title">
           {{ post.title }}
-        </div>
-        <div>
+        </h6>
+        <p class="posts__content">
           {{ post.content }}
-        </div>
+        </p>
       </li>
 
     </ul>
@@ -47,30 +46,50 @@ function navigateToLink(id) {
 </template>
 
 <style lang="sass" scoped>
-h4
+h1
+  font-size: 40px
   font-family: sans-serif
   color: red
+  text-align: center
+  padding: 0
+  margin: 20px 0 0 0
 
-#post-container
+.posts
+  display: flex
+  flex-direction: column
+  row-gap: 20px
   border: 5px solid black
   padding: 20px
   flex: 1
 
-  ul
+  &__order-list
     display: flex
     flex-direction: column
     grid-row-gap: 20px
+    list-style-type: none
     padding: 0
 
-    li
-      list-style-type: none
-      border: 2px solid black
-      padding: 20px 10px
+  &__list
+    display: flex
+    flex-direction: column
+    row-gap: 5px
+    border: 2px solid purple
+    padding: 20px 10px
+    cursor: pointer
 
-      img
-        width: 50%
-        height: auto
+  &__username
+    align-self: flex-end
+    font-size: 21px
 
-      span
-        font-weight: bold
+  &__title
+    font-size: 30px
+    margin: 0
+    text-align: center
+
+  &__content
+    font-size: 14px
+    -webkit-box-orient: vertical
+    -webkit-line-clamp: 1
+    overflow: hidden
+
 </style>

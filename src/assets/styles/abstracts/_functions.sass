@@ -1,0 +1,14 @@
+@use 'sass:math'
+@use 'variables'
+
+// removes the unit from the variable (example: 16px -> 16)
+@function strip-unit($number)
+  @return math.div($number, ($number * 0 + 1))
+
+@function get-desktop-vw($target)
+  $vw-context: (strip-unit(variables.$desktop)*.01) * 1px
+  @return math.div($target, $vw-context) * 1vw
+
+@function get-mobile-vw($target)
+  $vw-context: (strip-unit(variables.$mobile)*.01) * 1px
+  @return math.div($target, $vw-context) * 1vw

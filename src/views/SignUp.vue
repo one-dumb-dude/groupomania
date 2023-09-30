@@ -97,7 +97,7 @@ const onSubmit = async (event) => {
 </template>
 
 <style lang="sass" scoped>
-@import '@/assets/styles/mixins'
+@import '@/assets/styles/abstracts/mixins'
 
 #signup-form
   display: flex
@@ -114,5 +114,5 @@ const onSubmit = async (event) => {
     width: 300px
     height: max-content
 
-@include validation-error
+//@include validation-error
 </style>

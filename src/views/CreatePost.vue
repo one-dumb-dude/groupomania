@@ -75,7 +75,7 @@ const onSubmit = (event) => {
 </template>
 
 <style lang="sass" scoped>
-@import '@/assets/styles/mixins'
+@import '@/assets/styles/abstracts/mixins'
 
 .create-post
   display: flex
@@ -100,5 +100,5 @@ const onSubmit = (event) => {
   &__submit
     padding: 20px 0
 
-@include validation-error
+//@include validation-error
 </style>

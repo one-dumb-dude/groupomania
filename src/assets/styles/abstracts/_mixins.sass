@@ -1,0 +1,61 @@
+@use 'variables'
+@use 'functions' as funcs
+
+@mixin desktop_break
+  @media (min-width: (variables.$mobile + 1)) and (max-width: variables.$desktop)
+    @content
+
+@mixin mobile_break
+  @media (max-width: variables.$mobile)
+    @content
+
+@mixin fonts-sans-serif
+  *
+    font-family: sans-serif
+
+@mixin flex-setup($justify: center, $align: center, $direction: null)
+  display: flex
+  flex-direction: $direction
+  justify-content: $justify
+  align-items: $align
+
+@mixin global-text-styling
+  a
+    color: inherit
+
+  sub
+    font-size: 75%
+    line-height: 0
+    position: relative
+    vertical-align: baseline
+
+  sup
+    position: relative
+    vertical-align: super
+    top: -2px
+    margin-left: 5px
+    margin-right: 5px
+    font-size: 11px
+    line-height: 0
+    font-family: "Macys Sans Regular", sans-serif
+
+    @include desktop_break
+      top: funcs.get-desktop-vw(-2px)
+      margin-left: funcs.get-desktop-vw(5px)
+      margin-right: funcs.get-desktop-vw(5px)
+      font-size: funcs.get-desktop-vw(11px)
+
+    @include mobile_break
+      top: -0.27vw
+      margin-left: 0.67vw
+      margin-right: 0.67vw
+      font-size: 1.47vw
+
+@mixin rest-boxing
+  *,
+  *::before,
+  *::after
+    margin: 0
+    padding: 0
+    box-sizing: border-box
+

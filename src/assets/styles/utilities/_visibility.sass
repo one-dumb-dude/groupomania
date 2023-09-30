@@ -1,0 +1,10 @@
+@use '../abstracts/mixins'
+
+@include mixins.mobile_break
+  .show-in-desktop-only
+    display: none
+
+
+@include mixins.desktop_break
+  .show-in-mobile-only
+    display: none
