@@ -4,6 +4,7 @@ import {onMounted, computed, watch, reactive, ref} from 'vue'
 import {useRoute} from 'vue-router'
 import {useStore} from 'vuex';
 import {Comment, Post} from "@/types";
+import {onInputChange} from '@/utils/formValidation';
 import timeSince from '@/utils/timeSince'
 
 const store = useStore();
@@ -15,30 +16,59 @@ const postData = computed(() => store.state.post.postData as Post);
 const comments = computed(() => store.state.comment.comments as Comment[]);
 
 const state = reactive({
-  textarea: null,
-  textareaMinLength: 5,
-  textareaMaxLength: 200,
+  comment: null,
+  commentMinLength: 5,
+  commentMaxLength: 200,
+  commentErrorMessage: null,
+  isSubmitting: false,
   validityValid: false
+});
+
+watch(() => store.state.comment.errorMessage, (newValue) => {
+  state.commentErrorMessage = store.state.comment.errorMessage;
+});
+
+const checkValidity = computed(() => {
+  return !state.validityValid || !state.comment;
 });
 
 onMounted(async () => {
   await store.dispatch('post/getPost', {user_id: userId, post_id: postId});
 });
 
-function handleKeyDown(event) {
+const handleKeyDown = (event) => {
+  if (!state.validityValid || !state.comment) {
+    return
+  }
   if (event.key === 'Enter' && !event.shiftKey) {
-    createComment();
+    event.preventDefault();
+    createComment(event);
   }
 }
 
-const createComment = () => {
+const clearErrorMessages = () => {
+  store.state.comment.errorMessage = null;
+  state.commentErrorMessage = null;
+}
+
+const handleFocus = () => {
+  clearErrorMessages();
+}
+
+const createComment = (event) => {
+  event.preventDefault();
+
+  state.isSubmitting = true;
+
   const payload = {
     user_id: userId,
     post_id: postId,
-    comment: state.textarea
+    comment: state.comment
   };
   store.dispatch('comment/createComment', payload);
-  state.textarea = null;
+  state.comment = null;
+  clearErrorMessages();
+  state.isSubmitting = false;
 }
 
 </script>
@@ -72,17 +102,22 @@ const createComment = () => {
     </div>
   </div>
   <div class="create-comment">
-    <form @submit.prevent class="create-comment__form">
+    <form @submit="createComment" class="create-comment__form">
       <label for="comment" class="create-comment__label">Create a comment</label>
-      <textarea id="comment"
-                class="create-comment__textarea"
+      <strong v-if="state.commentErrorMessage">{{state.commentErrorMessage}}</strong>
+      <input id="comment"
+                class="create-comment__input"
+                type="text"
                 placeholder="Enter comment"
                 name="comment"
-                rows="3"
+                :minlength="state.commentMinLength"
+                :maxlength="state.commentMaxLength"
                 ref="commentInputRef"
-                v-model="state.textarea"
-                @keydown="handleKeyDown"></textarea>
-      <button class="create-comment__submit" type="submit" @click="createComment">Post comment</button>
+                v-model="state.comment"
+                @focus="handleFocus"
+                @input="onInputChange(commentInputRef, 'comment', state)"
+                @keydown="handleKeyDown">
+      <button class="create-comment__submit" type="submit" :disabled="checkValidity">Post comment</button>
     </form>
   </div>
 </template>
@@ -245,7 +280,9 @@ const createComment = () => {
     @include mixins.mobile_break
       font-size: funcs.get-mobile-vw(20px)
 
-  &__textarea
+  &__input
+    font-size: 18px
+    height: 50px
     resize: vertical
     width: 100%
     max-height: 100%

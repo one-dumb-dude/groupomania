@@ -49,9 +49,11 @@ function logout() {
   &__list
     margin: 0
     padding: 0
+    list-style-type: none
 
   &__username
-    list-style-type: none
+    font-size: 20px
+    font-weight: bold
 
   &__menu
     display: flex

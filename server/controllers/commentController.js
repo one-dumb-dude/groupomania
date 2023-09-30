@@ -13,18 +13,26 @@ const getComments = (req, res) => {
 };
 
 const createComment = (req, res) => {
-    const userId = req.body.post_id;
+    const userId = req.auth.user_id;
+    const {post_id, comment} = req.body;
+    const commentTrimmed = comment;
+    const commentMinLength = 5;
+    const commentMaxLength = 200;
+
+    if (commentTrimmed.trim().length < commentMinLength || commentTrimmed.length > commentMaxLength) {
+        return res.status(500).json({message: `Comment must contain ${commentMinLength} - ${commentMaxLength} characters`});
+    }
 
     const data = {
-        user_id: req.auth.user_id,
-        post_id: userId,
-        text: req.body.comment
+        user_id: userId,
+        post_id,
+        text: commentTrimmed
     };
 
     knex('comment')
         .insert(data)
         .then(() => {
-            return commentService.fetchComment(userId);
+            return commentService.fetchComment(post_id);
         })
         .then((allComments) => {
             res.status(201).json(allComments);

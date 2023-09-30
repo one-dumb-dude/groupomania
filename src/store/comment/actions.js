@@ -21,7 +21,7 @@ const commentActions = {
             }
         } catch (error) {
             console.error('Error: ', error);
-            commit('SET_ERROR_MESSAGE', error.message || 'Error creating comment');
+            commit('SET_ERROR_MESSAGE', error.response?.data?.message || 'Error creating comment');
         }
     }
 };
