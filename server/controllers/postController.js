@@ -7,6 +7,7 @@ const getPosts = (req, res) => {
         'p.post_id',
         'p.title',
         'p.content',
+        'p.image_url',
         'p.created_at',
         'p.updated_at'
     )
@@ -29,6 +30,7 @@ const getAPost = async (req, res) => {
         'u.username',
         'p.title',
         'p.content',
+        'p.image_url',
         'p.created_at'
     )
         .from('user as u')
@@ -54,6 +56,10 @@ const createPost = async (req, res) => {
             title: req.body.title,
             content: req.body.content
         };
+
+        if (req.file) {
+            data.image_url = `${process.env.LOCAL_SERVER_URL}/${req.file.filename}`;
+        }
 
         const result = await knex('post').insert(data);
 

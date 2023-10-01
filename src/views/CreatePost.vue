@@ -7,6 +7,7 @@ const store = useStore();
 
 const titleInputRef = ref(null);
 const contentTextAreaRef = ref(null);
+const inputFileRef = ref(null);
 
 const state = reactive({
   title: null,
@@ -18,6 +19,7 @@ const state = reactive({
   contentMaxLength: 200,
   contentErrorMessage: null,
   validityValid: false,
+  imgPreviewDataUrl: null,
   isSubmitting: false
 });
 
@@ -25,17 +27,41 @@ const checkValidity = computed(() => {
   return !state.validityValid || !state.title || !state.content
 });
 
+function handleImageChange () {
+  const imageFile = inputFileRef.value.files[0];
+
+  if (imageFile) {
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      state.imgPreviewDataUrl = reader.result;
+    };
+
+    reader.readAsDataURL(imageFile);
+  }
+}
+
 const onSubmit = (event) => {
   event.preventDefault();
 
   state.isSubmitting = true;
 
-  const createPostData = {
-    user_id: store.state.user.user_id,
-    title: state.title,
-    content: state.content
-  }
+  let createPostData;
 
+  if (inputFileRef.value && inputFileRef.value.files.length > 0) {
+    const formData = new FormData();
+    formData.append('user_id', store.state.user.user_id);
+    formData.append('title', state.title);
+    formData.append('content', state.content);
+    formData.append('image', inputFileRef.value.files[0]);
+    createPostData = formData;
+  } else {
+    createPostData = {
+      user_id: store.state.user.user_id,
+      title: state.title,
+      content: state.content
+    }
+  }
   store.dispatch('post/createPost', createPostData);
 
   state.isSubmitting = false;
@@ -68,6 +94,11 @@ const onSubmit = (event) => {
                 v-model="state.content"
       >
       </textarea>
+      <div>
+        <label for="image">Add an image:</label>
+        <input id="image" type="file" name="image" accept="image/*" ref="inputFileRef" @change="handleImageChange">
+      </div>
+      <img v-if="state.imgPreviewDataUrl" :src="state.imgPreviewDataUrl" alt="Preview of uploaded image">
       <span v-if="state.contentErrorMessage">{{state.contentErrorMessage}}</span>
       <button class="create-post__submit" type="submit" :disabled="checkValidity || state.isSubmitting">Create Post</button>
     </form>

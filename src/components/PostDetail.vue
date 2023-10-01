@@ -80,6 +80,9 @@ const createComment = (event) => {
       <li class="post__username">{{ postData.username }}</li>
       <li class="post__title">{{ postData.title }}</li>
       <li class="post__content">{{ postData.content }}</li>
+      <li v-if="postData.image_url">
+        <img class="post__image" :src="postData.image_url" alt="Uploaded image content">
+      </li>
     </ul>
     <div v-else class="post__message">
       No Post Data
@@ -211,6 +214,11 @@ const createComment = (event) => {
       &::before
         content: 'Content'
         font-weight: bold
+
+    &__image
+      width: 45%
+      height: auto
+
 
   .comments
     display: flex
