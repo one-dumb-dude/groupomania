@@ -5,7 +5,8 @@ const Post = {
     namespaced: true,
     state: () => ({
         posts: null,
-        postData: null
+        postData: null,
+        unreadPosts: null
     }),
     mutations: postMutations,
     actions: postActions

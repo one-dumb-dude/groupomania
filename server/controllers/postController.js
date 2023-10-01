@@ -75,7 +75,52 @@ const createPost = async (req, res) => {
     }
 }
 
+const markAsRead = async (req, res) => {
+    const userId = Number(req.auth.user_id);  // Assuming you attach the user ID to the request in your JWT verification middleware
+    const postId = Number(req.params?.postId);
+
+    const post = await knex('post').where('post_id', postId).first();
+
+    if (post.user_id === userId) {
+        return res.status(400).send({ message: 'You cannot mark your own post as read' });
+    }
+
+    try {
+        await knex('read_post')
+            .insert({ user_id: userId, post_id: postId })
+            .onConflict(['user_id', 'post_id'])
+            .ignore();  // Equivalent to DO NOTHING in SQL
+
+        res.status(200).send({ message: 'Marked as read' });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).send({ message: 'Server Error' });
+    }
+};
+
+const getUnreadPostsCount = async (req, res) => {
+    const userId = req.auth.user_id;
+
+    try {
+        const count = await knex('post')
+            .count('*')
+            .whereNotExists(
+                knex.select('*')
+                    .from('read_post')
+                    .where('user_id', userId)
+                    .whereRaw('post.post_id = read_post.post_id')
+            )
+            .andWhere('user_id', '<>', userId);
+
+        res.status(200).json(count[0].count); // Adjust based on how Knex returns count
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server Error' });
+    }
+};
+
+
 module.exports = {
-    getPosts, getAPost, createPost
+    getPosts, getAPost, createPost, markAsRead, getUnreadPostsCount
 }
 

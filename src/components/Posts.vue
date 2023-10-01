@@ -12,6 +12,7 @@ const user = computed(() => store.state.user);
 const posts = computed(() => store.state.post.posts as Post[]);
 
 onMounted(async () => {
+  await store.dispatch('post/getUnreadPostsCount', {user_id: user.value.user_id});
   await store.dispatch('post/getPosts', {user_id: user.value.user_id});
 });
 

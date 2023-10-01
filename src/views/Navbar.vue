@@ -11,6 +11,8 @@ const showLogout = computed(() => {
   return route.name !== 'Login' &&  route.name !== 'Signup';
 });
 
+const unreadPosts = computed(() => store.state.post.unreadPosts);
+
 function logout() {
   store.dispatch('user/logoutUser');
   router.push('/');
@@ -21,6 +23,7 @@ function logout() {
   <nav class="nav">
     <ul class="nav__list">
       <li class="nav__username">{{store.state.user.username}}</li>
+      <li v-if="unreadPosts > 0" class="nav__unread-count">Unread Post: {{unreadPosts}}</li>
     </ul>
     <menu class="nav__menu">
       <li>
@@ -47,6 +50,9 @@ function logout() {
   background-color: pink
 
   &__list
+    display: flex
+    align-items: center
+    column-gap: 10px
     margin: 0
     padding: 0
     list-style-type: none

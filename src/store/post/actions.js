@@ -47,8 +47,8 @@ const postActions = {
 
             const {postData, comments} = response.data;
 
-            commit('LOAD_A_POST', postData);
-            commit('comment/LOAD_COMMENTS', comments, { root: true });
+            commit('LOAD_POST_DETAILS', postData);
+            commit('comment/LOAD_COMMENTS', comments, {root: true});
         } catch (err) {
             console.error('Error getting a post');
             // TODO: set error message
@@ -76,6 +76,54 @@ const postActions = {
 
         } catch (err) {
             console.error('Error creating a post');
+            // TODO: set error message
+        }
+    },
+
+    async markPostAsRead({commit}, payload) {
+        try {
+            const token = localStorage.getItem('jwtToken');
+
+            if (!token) {
+                console.error('No token found!');
+                return;
+            }
+
+            const {user_id, post_id} = payload;
+
+            await axios.post(`${nodeServer}/api/posts/${Number(post_id)}/read`, {user_id}, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+        } catch (err) {
+            console.error('Error marking post as read');
+            // TODO: set error message
+        }
+    },
+
+    async getUnreadPostsCount({commit}, payload) {
+        try {
+            const token = localStorage.getItem('jwtToken');
+
+            if (!token) {
+                console.error('No token found!');
+                return;
+            }
+
+            const response = await axios.get(`${nodeServer}/api/posts/unread-count`, {
+                params: payload,
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            console.log(response.data);
+
+            commit('LOAD_UNREAD_COUNT', response.data);
+
+        } catch (err) {
+            console.error('Error marking post as read');
             // TODO: set error message
         }
     }

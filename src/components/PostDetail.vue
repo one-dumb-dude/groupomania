@@ -33,7 +33,12 @@ const checkValidity = computed(() => {
 });
 
 onMounted(async () => {
-  await store.dispatch('post/getPost', {user_id: userId, post_id: postId});
+  const payload = {
+    user_id: userId,
+    post_id: postId
+  }
+  await store.dispatch('post/markPostAsRead', payload)
+  await store.dispatch('post/getPost', payload);
 });
 
 const handleKeyDown = (event) => {
