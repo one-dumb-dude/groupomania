@@ -65,13 +65,26 @@ function logout() {
     display: flex
     justify-content: center
     align-items: center
-    grid-gap: 10px
+    grid-gap: 20px
     margin: 0
     padding: 0
     width: max-content
     list-style-type: none
 
+    a
+      font-size: 20px
+      font-weight: bold
+      color: red
+      text-decoration: none
+
   &__logout
-    padding: 10px
+    font-size: 20px
+    font-weight: bold
+    padding: 15px
+    cursor: pointer
+    border: none
+    border-radius: 10px
+    background-color: white
+    color: red
 
 </style>

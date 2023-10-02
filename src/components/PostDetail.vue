@@ -138,11 +138,11 @@ const createComment = (event) => {
   flex: 1
   display: flex
   flex-direction: column
-  justify-content: center
+  justify-content: flex-start
   row-gap: 15px
   margin: 50px auto
   width: 75%
-  overflow: hidden
+  overflow-y: auto
 
   @include mixins.mobile_break
     row-gap: funcs.get-mobile-vw(15px)
@@ -233,9 +233,6 @@ const createComment = (event) => {
 
     @include mixins.mobile_break
       row-gap: funcs.get-mobile-vw(20px)
-
-    &__wrapper
-      overflow-y: scroll
 
     &__list
       display: flex

@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import {useRouter} from "vue-router";
 import {useStore} from "vuex";
+import groupomaniaAboveFont from '@/assets/icons/svg/icon-above-font.svg'
 import {computed, onBeforeUnmount, reactive} from "vue";
 
 const store = useStore();
@@ -31,8 +32,9 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div id="login__main">
-    <form id="login__form" @submit.prevent @click="store.state.user.signupSuccessMessage ? store.commit('user/CLEAR_SIGNUP_SUCCESS_MESSAGE') : null">
+  <div class="login__main">
+    <img class="login__logo-icon" :src="groupomaniaAboveFont" alt="Groupomania Logo">
+    <form class="login__form" @submit.prevent @click="store.state.user.signupSuccessMessage ? store.commit('user/CLEAR_SIGNUP_SUCCESS_MESSAGE') : null">
       <label for="username">Username:</label>
       <input type="text" name="username" v-model="state.username" />
       <label for="password">Password:</label>
@@ -40,13 +42,17 @@ onBeforeUnmount(() => {
       <button type="button" @click="handleSignUp">Sign-Up</button>
       <button type="submit" @click="handleLogin">Login</button>
     </form>
-    <h4 id="message__loginError" v-if="loginErrorMessage">{{loginErrorMessage}}</h4>
-    <span id="message__signupSuccess" v-if="signupSuccessMessage">{{signupSuccessMessage}}</span>
+    <h4 class="message__loginError" v-if="loginErrorMessage">{{loginErrorMessage}}</h4>
+    <span class="message__signupSuccess" v-if="signupSuccessMessage">{{signupSuccessMessage}}</span>
   </div>
 </template>
 
 <style lang="sass" scoped>
-#login
+
+.login
+  &__logo-icon
+    width: 250px
+    height: auto
   &__main
     display: flex
     flex-direction: column
