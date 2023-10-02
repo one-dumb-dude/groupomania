@@ -29,16 +29,7 @@ function deleteUserAccount() {
   <div id="userprofile__page">
     <h3>user profile</h3>
 
-    <button type="button" @click="toggleEditable">Edit</button>
-
     <form id="userprofile__form" @submit.prevent>
-
-      <label for="username">UserName</label>
-      <input type="text" name="username" v-model="state.editableUsername" :readonly="!state.isEditable">
-
-      <label for="email">Email</label>
-      <input type="text" name="email" v-model="state.editableEmail" :readonly="!state.isEditable">
-
       <button type="button" @click="deleteUserAccount">Delete User Account</button>
     </form>
     <div v-if="deleteAccountMessage">{{deleteAccountMessage}}</div>
