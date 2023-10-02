@@ -13,6 +13,7 @@ const postActions = {
                 return;
             }
 
+            console.log(payload)
             const response = await axios.get(`${nodeServer}/api/posts`, {
                 params: payload,
                 headers: {

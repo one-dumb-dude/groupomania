@@ -1,25 +1,41 @@
 const knex = require('../knex/knex');
 const commentService = require('../services/commentService');
 
-const getPosts = (req, res) => {
-    knex.select(
-        'u.username',
-        'p.post_id',
-        'p.title',
-        'p.content',
-        'p.image_url',
-        'p.created_at',
-        'p.updated_at'
-    )
-        .from('user as u')
-        .join('post as p', 'u.user_id', '=', 'p.user_id')
-        .then((postData) => {
-            res.status(200).json(postData);
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-            res.status(500).json({message: 'Error getting posts'});
-        });
+const getPosts = async (req, res) => {
+    const userId = req.auth.user_id;
+
+    try {
+        const postsWithStatus = await knex('user as u')
+            .select(
+                'u.username',
+                'p.post_id',
+                'p.title',
+                'p.content',
+                'p.image_url',
+                'p.created_at',
+                'p.updated_at'
+            )
+            .select(
+                knex.raw(
+                    `CASE 
+                        WHEN read_post.post_id IS NOT NULL THEN 'READ' 
+                        WHEN p.user_id = ? THEN 'Author' 
+                        ELSE 'UNREAD' 
+                     END as post_status`,
+                    [userId]
+                )
+            )
+            .join('post as p', 'u.user_id', 'p.user_id')
+            .leftJoin('read_post', function () {
+                this.on('p.post_id', '=', 'read_post.post_id')
+                    .andOn('read_post.user_id', '=', knex.raw('?', [userId]))
+            });
+
+        res.status(200).json(postsWithStatus);
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({message: 'Error getting posts'});
+    }
 };
 
 const getAPost = async (req, res) => {

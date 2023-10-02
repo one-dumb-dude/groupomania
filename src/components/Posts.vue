@@ -30,6 +30,9 @@ function navigateToLink(id) {
     </div>
     <ul class="posts__order-list" v-if="posts">
       <li class="posts__list" v-for="post in posts" :key="post.post_id" @click="navigateToLink(post.post_id)">
+        <p>
+          {{post.post_status}}
+        </p>
         <strong class="posts__username">
           {{ post.username }}
         </strong>
