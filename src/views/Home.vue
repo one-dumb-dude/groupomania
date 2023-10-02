@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import Chatbox from '@/components/Chatbox.vue';
-import ChatViewer from "@/components/ChatViewer.vue";
 import Posts from "@/components/Posts.vue";
 
 </script>
@@ -9,8 +7,6 @@ import Posts from "@/components/Posts.vue";
   <section class="home">
     <div class="home__wrapper">
       <Posts />
-<!--      <ChatViewer />-->
-<!--      <Chatbox />-->
     </div>
   </section>
 </template>

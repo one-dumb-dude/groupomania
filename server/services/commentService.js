@@ -5,7 +5,6 @@ const commentService = {
         return knex.select(
             'u.username',
             'c.text',
-            'c.image_url',
             'c.created_at',
             'c.updated_at'
         )
@@ -17,7 +16,6 @@ const commentService = {
             'u.username',
             'c.comment_id',
             'c.text',
-            'c.image_url',
             'c.created_at'
         )
             .from('comment as c')
